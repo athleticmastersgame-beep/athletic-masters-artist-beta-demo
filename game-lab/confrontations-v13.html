@@ -76,11 +76,36 @@ function drawMatrix(){
  const hit=matchup(a,b,bonus);return '<td class="'+(hit?'win':'lose')+'"><strong>'+(hit?'RÉUSSITE':'BLOQUÉ')+'</strong><br>'+a[5]+' / '+(b[3]+bonus)+'</td>';
  }).join('')+'</tr>').join('')+'</tbody>';
 }
+function exactKoModel(bonus){
+ // Exhaustive weighted traversal: independent uniform selections from still-eligible athletes,
+ // three rounds, both always challenge, with fixed defensive bonus (not actual draw probabilities).
+ let probability=0,anyKO=0,koTotal=0,hitsA=0,hitsB=0,terminal=0;
+ const sideA=group('A'),sideB=group('B');
+ function visit(round,pressureA,pressureB,removedA,removedB,weight,seenKO,koCount,nHitsA,nHitsB){
+  if(round===3){
+   probability+=weight;anyKO+=seenKO?weight:0;koTotal+=weight*koCount;
+   hitsA+=weight*nHitsA;hitsB+=weight*nHitsB;terminal++;return;
+  }
+  const availableA=[0,1,2,3,4,5].filter(i=>!removedA.includes(i));
+  const availableB=[0,1,2,3,4,5].filter(i=>!removedB.includes(i));
+  const branch=weight/(availableA.length*availableB.length);
+  for(const i of availableA)for(const j of availableB){
+   const hitA=matchup(sideA[i],sideB[j],bonus),hitB=matchup(sideB[j],sideA[i],bonus);
+   const pA=pressureA.slice(),pB=pressureB.slice();
+   if(hitA)pB[j]++;
+   if(hitB)pA[i]++;
+   const koA=hitB&&pA[i]>=2,koB=hitA&&pB[j]>=2;
+   visit(round+1,pA,pB,koA?[...removedA,i]:removedA,koB?[...removedB,j]:removedB,
+     branch,seenKO||koA||koB,koCount+Number(koA)+Number(koB),
+     nHitsA+Number(hitA),nHitsB+Number(hitB));
+  }
+ }
+ visit(0,[0,0,0,0,0,0],[0,0,0,0,0,0],[],[],1,false,0,0,0);
+ return {bonus,probability,anyKO,koTotal,hitsA,hitsB,terminal};
+}
 function drawKO(){
- el('koStats').innerHTML=
- '<div class="metric"><span>Sans Parade imposée</span><b>20,89 %</b><span>Parcours avec au moins un K.O.</span></div>'+
- '<div class="metric"><span>Avec Parade imposée</span><b>4,34 %</b><span>Parcours avec au moins un K.O.</span></div>'+
- '<div class="metric"><span>Parade + T2 imposées</span><b>0,45 %</b><span>Contrefactuel, T2 toujours disponible</span></div>';
+ const rows=DEFENSE.map(d=>({...exactKoModel(d.bonus),name:d.name}));
+ el('koStats').innerHTML=rows.map(x=>'<div class="metric"><span>'+x.name+'</span><b>'+(100*x.anyKO).toFixed(2).replace('.',',')+' %</b><span>Parcours avec au moins un K.O. (calcul exhaustif)</span></div>').join('');
 }
 for(const name of ['attacker','defender','defense','attackerEnergy','defenderEnergy','pressure','t2available'])el(name).onchange=drawChallenge;
 el('matrixDefense').onchange=drawMatrix;
