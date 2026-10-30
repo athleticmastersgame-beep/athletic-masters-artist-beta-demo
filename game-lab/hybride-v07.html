@@ -227,7 +227,7 @@ el('rules').innerHTML='<ul><li><strong>Statut :</strong> moteur hybride EXPÉRIM
 '<li><strong>Départage :</strong> total PC, puis performances sportives BRUTES, puis manches sportives remportées, sinon nul.</li>'+
 '<li><strong>Limites :</strong> une seule carte jouable par fenêtre dans cette UI ; équipements placés sur le titulaire seulement ; aucune capacité historique, pas de Capitaine.</li></ul>';
 }
-function listReaction(){const items=candidates(game.you,'reaction');return '<label for="supportChoice">Technique de réaction (optionnelle)</label><select id="supportChoice"><option value="">Passer</option>'+
+function listReaction(){const p=game.you;const was=p.parry;p.parry=game.bot.challenge&&p.energy>=1;const items=candidates(p,'reaction');p.parry=was;return '<label for="supportChoice">Technique de réaction (optionnelle)</label><select id="supportChoice"><option value="">Passer</option>'+
 items.map(x=>'<option value="'+x.index+'">'+cardText(x)+'</option>').join('')+'</select>'+
 '<p class="hint">Les réactions requièrent une Parade effectivement payée.</p>'}
 el('reset').onclick=start;
