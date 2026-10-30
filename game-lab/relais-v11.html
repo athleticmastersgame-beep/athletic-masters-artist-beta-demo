@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>ATHLETIC MASTERS — Relais des Champions V1.0 (LAB)</title>
+<style>
+:root{color-scheme:dark;font:15px/1.5 system-ui,-apple-system,sans-serif;color:#f0ebdf;background:#091326}
+*{box-sizing:border-box}body{margin:0}main{max-width:1120px;margin:auto;padding:24px 17px 74px}
+h1{font-size:clamp(27px,4.6vw,44px);line-height:1.13;margin:6px 0 12px}h2{font-size:20px;margin:0 0 12px}h3{font-size:16px;margin:0 0 6px}
+a{color:#ebd18f}.eyebrow{color:#ebcc86;text-transform:uppercase;letter-spacing:1.7px;font-size:11px;font-weight:750}
+.muted,.hint{color:#bac6d3}.hint{font-size:12px}.panel{background:#112138;border:1px solid #405069;border-radius:14px;padding:20px;margin:16px 0}
+.warning{border-color:#ae9366;background:#28283b}.warning strong{color:#f0d392}
+.between{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.row{display:flex;align-items:center;flex-wrap:wrap;gap:10px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.metric{background:#1a3148;border:1px solid #42546b;padding:13px;border-radius:11px}
+.metric b{display:block;font-size:27px;color:#ebcd91}.metric span{font-size:12px;color:#c8d5e2}
+.chip{border:1px solid #957e54;color:#ecd498;font-size:11px;display:inline-block;padding:6px 9px;border-radius:100px}
+.pilot{border:1px solid #586c83;background:#1c344d;border-radius:11px;padding:13px;text-align:left;display:block;width:100%;cursor:pointer;min-width:0}
+.pilot strong{display:block;color:#eedaad;font-size:15px}.pilot small{color:#b6c9d9}
+.pilot.selected{border:2px solid #f2cc81;box-shadow:0 0 0 2px #bb995828;background:#294057}
+.pilot.off{opacity:.52}.pilot:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #82c4fa;outline-offset:2px}
+button,input,select{font:inherit}button,select,input[type=number]{border:1px solid #697d93;border-radius:8px;background:#203a56;color:#fff7ed;padding:11px 13px}
+button{font-weight:700;cursor:pointer}button:hover:not(:disabled){background:#385576}button:disabled{opacity:.4;cursor:not-allowed}
+.primary{background:#e6c784;color:#142236;border-color:#e6c784}.primary:hover:not(:disabled){background:#ffe2ab;color:#142236}
+label{display:block;color:#dbe7ed;font-size:12px;margin-bottom:6px}select,input[type=number]{width:100%}
+.stat{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}.stat span{font-size:11px;border:1px solid #536b7f;border-radius:6px;padding:2px 5px}
+.preview{background:#1b3550;border-left:3px solid #e1c580;padding:13px;border-radius:8px;margin:12px 0}
+.pick{display:flex;gap:10px;padding:10px;border:1px solid #425a71;border-radius:9px;cursor:pointer;align-items:flex-start}
+.pick input{margin-top:4px;accent-color:#f0cc83}
+.pick strong{display:block}.pick small{color:#b9c8d8;display:block}
+.pick.incompatible{opacity:.49}.race{position:relative;display:grid;gap:9px;padding:10px 0}
+.track{display:flex;gap:9px;align-items:center}
+.track .name{flex:0 0 78px;font-size:12px;color:#e8d3a4}
+.bar{background:#243b53;border:1px solid #4b637f;position:relative;height:18px;flex:1;border-radius:20px;overflow:hidden}
+.fill{height:100%;border-radius:20px;background:#d8b87b;min-width:0;transition:width .2s}.fill.bot{background:#78a9d1}
+.log{max-height:460px;overflow:auto}.log article{padding:11px 0;border-top:1px solid #334962}
+.log article strong{color:#edd194}.log small{color:#bed0dd}.status{padding:11px;background:#233d54;border-left:3px solid #eac785;border-radius:8px}
+ol,ul{padding-left:21px}li{margin:6px 0}footer{color:#a4b7c9;font-size:11px;margin-top:22px}
+@media(max-width:740px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cols{grid-template-columns:1fr}.panel{padding:14px}.track .name{flex-basis:53px}}
+@media(max-width:450px){.grid{grid-template-columns:1fr}}
+</style></head>
+<body><main>
+<header class="between"><div><div class="eyebrow">ATHLETIC MASTERS · GAME DESIGN LAB</div><h1>Relais des Champions <span style="color:#eac786">V1.1</span></h1><div class="muted">Cinq étapes, trois titulaires, fatigue cumulative et soutiens tactiques.</div></div><span class="chip">DÉMO NON CANONIQUE</span></header>
+<section class="panel warning"><strong>LABORATOIRE UNIQUEMENT.</strong> Toutes les cartes LAB-* sont fictives. Cette page reprend les mêmes 12 athlètes et les mêmes 7 identités de soutiens que Championnat et Conquête, mais interprète les soutiens selon les règles du Relais. Aucune donnée historique, capacité officielle ou carte artistique n'est modifiée. Aucun serveur ni test papier.</section>
+<section class="panel" id="configPanel"><h2>1. Préparer l'équipe</h2><div class="cols"><div><label for="seat">Équipe que vous dirigez</label><select id="seat"><option value="A">Forge — A</option><option value="B">Acier — B</option></select></div><div><label for="seed">Graine de partie reproductible</label><input type="number" id="seed" value="20261030" min="1" max="2147483647"></div></div><div style="max-width:400px;margin-top:12px"><label for="botDifficulty">Politique de l’ordinateur</label><select id="botDifficulty"><option value="discovery">Exploration — choix diversifiés</option><option value="greedy" selected>Réactif — gain immédiat</option><option value="planner">Planificateur — anticipation de la fatigue</option></select></div><p class="hint">La difficulté n’est pas calibrée. Le Planificateur ne connaît pas vos décisions ni les futures pioches.</p><p class="hint">Sélectionnez exactement trois athlètes parmi les six. Contrairement aux premiers tests, chaque engagement fait progresser la fatigue : sur cinq étapes avec trois titulaires, au moins deux réutilisations sont nécessaires.</p><div class="grid" id="roster"></div><div class="row" style="margin-top:14px"><button class="primary" id="start">Démarrer la course</button><button id="reset">Recomposer l'équipe</button></div><p id="configError" class="hint" role="alert"></p></section>
+<div class="grid" id="score"></div>
+<section class="panel" id="racePanel" hidden><div class="between"><h2>2. Progression de la course</h2><span class="chip" id="stageLabel">Étape 1 / 5</span></div><div class="race" id="race"></div><div class="grid" id="stages"></div></section>
+<section class="panel" id="playPanel" hidden><h2>3. Décider de la prochaine étape</h2><div id="play"></div></section>
+<section class="panel"><h2>4. Journal et résultats</h2><div id="history" class="log"><p class="muted">Aucune course commencée.</p></div><div class="row" style="margin-top:12px"><button id="export" disabled>Exporter le résultat JSON</button></div></section>
+<section class="panel"><h2>Règlement de laboratoire V1.1</h2><ol>
+<li>Une course de <strong>cinq étapes</strong>, chacune dotée d'une statistique principale (comptée deux fois) et secondaire (comptée une fois) ; les résultats sont additionnés en <strong>points de progression non arrondis</strong>.</li>
+<li>Chaque équipe choisit <strong>trois athlètes actifs parmi six</strong>. Un même athlète peut courir plusieurs étapes.</li>
+<li>À chaque engagement, l'athlète part avec sa fatigue actuelle ; chaque point de fatigue retire <strong>3 points</strong> de progression. Après l'étape, sa fatigue augmente de <strong>1</strong>. Elle ne disparaît pas automatiquement. Les soutiens de récupération peuvent la réduire avant le calcul.</li>
+<li>Chaque équipe a un paquet de <strong>12 soutiens compatibles</strong> : six Techniques, quatre Équipements, deux Événements, représentant les mêmes sept identités que les deux autres laboratoires. Main initiale de quatre, puis +1 à chaque étape suivante.</li>
+<li>Une carte de soutien maximum par étape, deux énergies non reportables ; équipement permanent attaché à l'athlète, maximum un par athlète. Les soutiens incompatibles ne peuvent pas être joués.</li>
+<li>Objectif : obtenir le plus grand cumul de progression après cinq étapes. Départage : étapes gagnées, sinon égalité.</li>
+</ol><h3>Mini-Codex : adaptations expérimentales des soutiens</h3><div class="cols" id="codex"></div><p class="hint">La Technique T2 « Parade préparée » n'est pas compatible avec Relais, faute de mécanisme de Parade. Elle est exclue du paquet de ce mode, mais reste documentée dans le Codex comme carte non compatible.</p></section>
+<footer>ATHLETIC MASTERS — Relais LAB V1.1. Les simulations ne prouvent ni l'équilibrage ni l'intérêt d'un mode. Aucune œuvre historique ni condition contractuelle n'est présentée ici.</footer>
+</main>
+<script>
+"use strict";
+const ATH=[['LAB-A01','Forge',9,7,6,8],['LAB-A02','Tempo',6,8,9,7],['LAB-A03','Prisme',6,9,7,8],['LAB-A04','Éclair',8,6,7,9],['LAB-A05','Équilibre',7,8,8,7],['LAB-A06','Horizon',8,7,8,7],
+['LAB-B01','Acier',8,8,7,7],['LAB-B02','Souffle',7,7,9,7],['LAB-B03','Sillage',6,9,8,7],['LAB-B04','Granite',9,6,7,8],['LAB-B05','Élan',7,8,6,9],['LAB-B06','Azur',8,7,7,8]];
+const SUP=[
+{id:'T1',name:'Ajustement technique',kind:'Technique',cost:1,description:'+2 si TECHNIQUE est la secondaire.'},
+{id:'T2',name:'Parade préparée',kind:'Technique',cost:0,description:'Incompatible : aucun Défi ou Parade dans Relais.'},
+{id:'T3',name:'Impulsion contrôlée',kind:'Technique',cost:1,description:'+1 sur l’étape disputée.'},
+{id:'T4',name:'Élan initial',kind:'Technique',cost:1,description:'+2 si cet athlète n’a jamais été engagé.'},
+{id:'E1',name:'Matériel polyvalent',kind:'Équipement',cost:2,description:'Attaché à l’athlète, +1 à toutes ses futures étapes, y compris celle-ci.'},
+{id:'E2',name:'Matériel technique',kind:'Équipement',cost:2,description:'Attaché à l’athlète, +2 si TECHNIQUE est la principale.'},
+{id:'EV1',name:'Second souffle',kind:'Événement',cost:1,description:'Retire 1 fatigue avant cette étape ; aucun effet si la fatigue est nulle.'}
+];
+const A=Object.fromEntries(ATH.map(x=>[x[0],x])),S=Object.fromEntries(SUP.map(x=>[x.id,x]));
+const DECK=['T1','T1','T3','T3','T4','T4','E1','E1','E2','E2','EV1','EV1'];
+const STAGES=[{title:'Épreuve de puissance',main:'FORCE',secondary:'TECHNIQUE'},{title:'Course d’endurance',main:'ENDURANCE',secondary:'IMPACT'},{title:'Parcours technique',main:'TECHNIQUE',secondary:'ENDURANCE'},{title:'Défi d’impact',main:'IMPACT',secondary:'FORCE'},{title:'Finale d’endurance',main:'ENDURANCE',secondary:'TECHNIQUE'}];
+const IDX={FORCE:2,TECHNIQUE:3,ENDURANCE:4,IMPACT:5};
+const el=id=>document.getElementById(id);let game=null,rng=()=>Math.random(),form={ath:null,sup:''},teamPick=[];
+function seeded(seed){let t=seed>>>0;return function(){t+=0x6d2b79f5;let z=t;z=Math.imul(z^(z>>>15),z|1);z^=z+Math.imul(z^(z>>>7),z|61);return ((z^(z>>>14))>>>0)/4294967296}}
+function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function side(k,lineup){return {k,ids:ATH.filter(a=>a[0].startsWith('LAB-'+k)).map(a=>a[0]),lineup:lineup.slice(),fatigue:{},gear:{},used:{},deck:shuffle(DECK),hand:[],discard:[],progress:0,stagesWon:0}}
+function draw(p,n){while(n-->0&&p.deck.length)p.hand.push(p.deck.pop())}
+function activeStages(p){return p.lineup.map(id=>({id,name:A[id][1],fatigue:p.fatigue[id]||0,used:p.used[id]||0,gear:p.gear[id]||null}))}
+function base(id,i){const s=STAGES[i],v=A[id];return 2*v[IDX[s.main]]+v[IDX[s.secondary]]}
+function gearBonus(p,id,i){const s=STAGES[i],e=p.gear[id];return e==='E1'?1:e==='E2'&&s.main==='TECHNIQUE'?2:0}
+function supportAllowed(p,ath,i,index){
+ if(!p.lineup.includes(ath)||!Number.isInteger(index)||index<0||index>=p.hand.length)return false;
+ const card=p.hand[index],stage=STAGES[i];
+ if(!S[card]||S[card].cost>2||card==='T2')return false;
+ if(card==='T1'&&stage.secondary!=='TECHNIQUE')return false;
+ if(card==='T4'&&(p.used[ath]||0)!==0)return false;
+ if((card==='E1'||card==='E2')&&p.gear[ath])return false;
+ if(card==='EV1'&&(p.fatigue[ath]||0)<1)return false;
+ return true;
+}
+function bonusFor(p,ath,i,card){
+ const st=STAGES[i],f=p.fatigue[ath]||0;
+ const gear=gearBonus(p,ath,i);
+ let one=0,afterFatigue=f;
+ if(card==='T1')one=2;
+ if(card==='T3')one=1;
+ if(card==='T4')one=2;
+ if(card==='EV1')afterFatigue=Math.max(0,f-1);
+ if(card==='E1')one+=1;
+ if(card==='E2'&&st.main==='TECHNIQUE')one+=2;
+ return {fatigueStart:f,fatigueForScore:afterFatigue,base:base(ath,i),equipment:gear,instant:one,score:Math.max(0,base(ath,i)+gear+one-3*afterFatigue)};
+}
+function projection(p,ath,i,index){
+ const card=index===null?null:p.hand[index];
+ const v=bonusFor(p,ath,i,card);
+ return {...v,card};
+}
+function chooseBotTeam(k){
+ const ids=ATH.filter(x=>x[0].startsWith('LAB-'+k)).map(x=>x[0]),plans=[];
+ for(let a=0;a<ids.length;a++)for(let b=a+1;b<ids.length;b++)for(let c=b+1;c<ids.length;c++){
+ const lineup=[ids[a],ids[b],ids[c]];
+ let evaluation=0;for(let i=0;i<5;i++)evaluation+=Math.max(...lineup.map(id=>base(id,i)));
+ evaluation+=rng()*5;plans.push({lineup,score:evaluation});
+ }
+ plans.sort((a,b)=>b.score-a.score);return plans[0].lineup;
+}
+function chooseBotGreedy(p,i){
+ const choices=[];
+ for(const ath of p.lineup){
+ for(const index of [null,...p.hand.map((_,idx)=>idx).filter(idx=>supportAllowed(p,ath,i,idx))]){
+ const v=projection(p,ath,i,index),card=index===null?null:p.hand[index];
+ const eff=v.score+(card==='E1'?(4-i)*.8:card==='E2'&&i<2?.65:0)-(card===null?0:.25)+rng()*.8;
+ choices.push({ath,index,value:eff});
+ }}
+ return choices.sort((a,b)=>b.value-a.value)[0];
+}
+function bestFuture(p,step,fat,gear){
+ if(step>=STAGES.length)return 0;
+ let best=-Infinity;
+ for(const ath of p.lineup){
+ const f=fat[ath]||0,e=gear[ath],st=STAGES[step];
+ const bonus=e==='E1'?1:e==='E2'&&st.main==='TECHNIQUE'?2:0;
+ const score=Math.max(0,base(ath,step)+bonus-3*f);
+ const future=score+bestFuture(p,step+1,{...fat,[ath]:f+1},gear);
+ if(future>best)best=future;
+ }
+ return best;
+}
+function chooseBotPlanner(p,i){
+ const choices=[];
+ for(const ath of p.lineup)for(const index of [null,...p.hand.map((_,idx)=>idx).filter(idx=>supportAllowed(p,ath,i,idx))]){
+ const v=projection(p,ath,i,index),card=index===null?null:p.hand[index];
+ const fat={...p.fatigue,[ath]:v.fatigueForScore+1},gear={...p.gear};
+ if(card==='E1'||card==='E2')gear[ath]=card;
+ const future=bestFuture(p,i+1,fat,gear);
+ const cost=card===null?0:card==='E1'||card==='E2'?.35:.7;
+ choices.push({ath,index,value:v.score+future-cost+rng()*.04});
+ }
+ return choices.sort((a,b)=>b.value-a.value)[0];
+}
+function chooseBotExploration(p,i){
+ const ath=p.lineup[Math.floor(rng()*p.lineup.length)];
+ const opts=p.hand.map((_,idx)=>idx).filter(idx=>supportAllowed(p,ath,i,idx));
+ const index=opts.length&&rng()<.45?opts[Math.floor(rng()*opts.length)]:null;
+ return {ath,index,value:projection(p,ath,i,index).score};
+}
+function chooseStrategy(p,i,style){
+ return style==='planner'?chooseBotPlanner(p,i):style==='discovery'?chooseBotExploration(p,i):chooseBotGreedy(p,i);
+}
+function chooseBot(p,i){return chooseStrategy(p,i,game.botDifficulty)}
+function apply(p,ath,i,index){
+ if(!p.lineup.includes(ath))throw Error('Athlète hors équipe');
+ if(index!==null&&!supportAllowed(p,ath,i,index))throw Error('Soutien illégal');
+ const card=index===null?null:p.hand[index];
+ const v=projection(p,ath,i,index);
+ if(card){p.hand.splice(index,1);if(card==='E1'||card==='E2')p.gear[ath]=card;else p.discard.push(card)}
+ p.progress+=v.score;p.fatigue[ath]=v.fatigueForScore+1;p.used[ath]=(p.used[ath]||0)+1;
+ return {ath,athName:A[ath][1],card,cardName:card?S[card].name:'Aucun',...v,fatigueAfter:p.fatigue[ath]};
+}
+function playStage(){
+ if(!game||game.phase!=='playing')return;
+ const ath=el('athleteSelect')?.value||form.ath,v=el('supportSelect')?.value??'';
+ const index=v===''?null:Number(v);
+ if(!game.you.lineup.includes(ath)||index!==null&&!supportAllowed(game.you,ath,game.stage,index)){
+  if(el('error'))el('error').textContent='Sélection illégale : vérifiez l’athlète, la fatigue, le coût ou la compatibilité.';return;
+ }
+ const bot=chooseBot(game.bot,game.stage),u=apply(game.you,ath,game.stage,index),b=apply(game.bot,bot.ath,game.stage,bot.index);
+ if(u.score>b.score)game.you.stagesWon++;if(b.score>u.score)game.bot.stagesWon++;
+ game.history.push({stage:game.stage+1,title:STAGES[game.stage].title,you:u,bot:b,cum:[game.you.progress,game.bot.progress]});
+ game.stage++;
+ if(game.stage===5)game.phase='done';
+ else{draw(game.you,1);draw(game.bot,1)}
+ form={ath:game.you.lineup[0],sup:''};render();
+}
+function result(){
+ let dif=game.you.progress-game.bot.progress;
+ if(!dif)dif=game.you.stagesWon-game.bot.stagesWon;
+ return dif>0?'Victoire du joueur':dif<0?'Victoire de l’ordinateur':'Match nul';
+}
+function selectedTeam(){return teamPick.filter(id=>ATH.some(x=>x[0]===id&&x[0].startsWith('LAB-'+el('seat').value)))}
+function resetForm(){
+ game=null;teamPick=ATH.filter(x=>x[0].startsWith('LAB-'+el('seat').value)).slice(0,3).map(x=>x[0]);
+ el('configPanel').hidden=false;el('racePanel').hidden=true;el('playPanel').hidden=true;el('export').disabled=true;
+ el('score').innerHTML='';el('history').innerHTML='<p class="muted">Aucune course commencée.</p>';
+ showRoster();
+}
+function showRoster(){
+ const k=el('seat').value;
+ el('roster').innerHTML=ATH.filter(a=>a[0].startsWith('LAB-'+k)).map(a=>
+ '<button type="button" class="pilot '+(teamPick.includes(a[0])?'selected':'')+'" data-ath="'+a[0]+'" aria-pressed="'+teamPick.includes(a[0])+'"><strong>'+a[1]+'</strong><small>'+a[0]+'</small><div class="stat"><span>FOR '+a[2]+'</span><span>TEC '+a[3]+'</span><span>END '+a[4]+'</span><span>IMP '+a[5]+'</span></div><div class="hint">'+(teamPick.includes(a[0])?'✓ Sélectionné':'Sélectionner')+'</div></button>').join('');
+ for(const n of el('roster').querySelectorAll('[data-ath]'))n.onclick=()=>{
+  const id=n.dataset.ath;
+  if(teamPick.includes(id))teamPick=teamPick.filter(x=>x!==id);
+  else if(teamPick.length<3)teamPick.push(id);
+  el('configError').textContent=teamPick.length===3?'':'Sélectionnez exactement trois athlètes.';
+  showRoster();
+ };
+}
+function start(){
+ if(selectedTeam().length!==3){el('configError').textContent='Sélectionnez exactement trois athlètes uniques.';return;}
+ let sd=Math.trunc(Number(el('seed').value));if(!Number.isFinite(sd)||sd<1||sd>2147483647)sd=20261030;
+ el('seed').value=sd;rng=seeded(sd);
+ const k=el('seat').value,lineup=selectedTeam(),bot=chooseBotTeam(k==='A'?'B':'A');
+ game={version:'1.1',seed:sd,botDifficulty:el('botDifficulty')?.value||'greedy',stage:0,phase:'playing',you:side(k,lineup),bot:side(k==='A'?'B':'A',bot),history:[]};
+ draw(game.you,4);draw(game.bot,4);
+ form={ath:game.you.lineup[0],sup:''};
+ el('configPanel').hidden=true;el('racePanel').hidden=false;el('playPanel').hidden=false;el('export').disabled=false;render();
+}
+function render(){
+ if(!game)return;
+ const g=game,u=g.you,b=g.bot;
+ el('score').innerHTML='<div class="metric"><span>Vous · '+u.k+'</span><b>'+u.progress+'</b>progression totale</div>'+
+ '<div class="metric"><span>Ordinateur · '+b.k+'</span><b>'+b.progress+'</b>progression totale</div>'+
+ '<div class="metric"><span>Étapes</span><b>'+g.stage+' / 5</b>terminées</div>';
+ const high=Math.max(1,u.progress,b.progress);
+ el('race').innerHTML='<div class="track"><span class="name">Vous</span><div class="bar"><div class="fill" style="width:'+(u.progress/high*100).toFixed(2)+'%"></div></div><strong>'+u.progress+'</strong></div>'+
+ '<div class="track"><span class="name">Bot</span><div class="bar"><div class="fill bot" style="width:'+(b.progress/high*100).toFixed(2)+'%"></div></div><strong>'+b.progress+'</strong></div>';
+ el('stageLabel').textContent=g.phase==='done'?'Course terminée':'Étape '+(g.stage+1)+' / 5';
+ el('stages').innerHTML=STAGES.map((st,i)=>'<div class="metric"><span>Étape '+(i+1)+(i<g.stage?' ✓':'')+'</span><strong style="display:block">'+st.title+'</strong><span>'+st.main+' ×2 + '+st.secondary+'</span></div>').join('');
+ let html='';
+ if(g.phase==='done'){
+  html='<div class="status"><h2>'+result()+'</h2><p>Progression : '+u.progress+' contre '+b.progress+'. Étapes remportées : '+u.stagesWon+' contre '+b.stagesWon+'.</p><p class="hint">Fatigue finale de votre équipe : '+u.lineup.map(id=>A[id][1]+' '+(u.fatigue[id]||0)).join(' · ')+'</p></div><button id="again" class="primary">Rejouer avec la même équipe et graine</button><button id="change">Changer mon équipe</button>';
+ }else{
+  if(!u.lineup.includes(form.ath))form.ath=u.lineup[0];
+  const st=STAGES[g.stage];
+  html='<h3>Étape '+(g.stage+1)+' — '+st.title+'</h3><p class="hint">Votre titulaire courant possède une fatigue cumulative. Chaque engagement ajoute 1 fatigue après l’effort ; aucun repos automatique.</p>'+
+  '<label for="athleteSelect">1. Athlète engagé</label><select id="athleteSelect">'+u.lineup.map(id=>'<option value="'+id+'" '+(form.ath===id?'selected':'')+'>'+A[id][1]+' · base '+base(id,g.stage)+' · fatigue '+(u.fatigue[id]||0)+'</option>').join('')+'</select>'+
+  '<div class="grid" style="margin-top:11px">'+activeStages(u).map(o=>'<div class="metric"><span>'+o.name+'</span><b style="font-size:18px">Fatigue '+o.fatigue+'</b><span>Engagements : '+o.used+' · '+(o.gear?S[o.gear].name:'Sans équipement')+'</span></div>').join('')+'</div>'+
+  '<label for="supportSelect" style="margin-top:12px">2. Soutien facultatif — deux énergies disponibles</label><select id="supportSelect"><option value="">Aucun soutien</option>'+
+   u.hand.map((id,i)=>'<option value="'+i+'" '+(form.sup===String(i)?'selected':'')+' '+(supportAllowed(u,form.ath,g.stage,i)?'':'disabled')+'>'+S[id].name+' · '+S[id].cost+' énergie'+(id==='T2'?' — incompatible':'')+'</option>').join('')+
+  '</select><p class="hint">Main : '+u.hand.length+' · Pioche : '+u.deck.length+' · T2 exclue du paquet compatible.</p>'+
+  '<div class="preview" id="projection"></div><p class="hint" id="error" role="alert"></p><button id="playStage" class="primary">Disputer l’étape</button>';
+ }
+ el('play').innerHTML=html;
+ if(el('athleteSelect'))el('athleteSelect').onchange=()=>{form.ath=el('athleteSelect').value;form.sup='';render()};
+ if(el('supportSelect'))el('supportSelect').onchange=()=>{form.sup=el('supportSelect').value;refreshProjection()};
+ if(el('playStage'))el('playStage').onclick=playStage;
+ if(el('again'))el('again').onclick=()=>{const lineup=u.lineup.slice();resetForm();teamPick=lineup;showRoster();start()};
+ if(el('change'))el('change').onclick=resetForm;
+ if(el('projection'))refreshProjection();
+ el('history').innerHTML=g.history.length?g.history.slice().reverse().map(h=>
+ '<article><strong>Étape '+h.stage+' — '+h.title+'</strong><div class="cols">'+
+ '<div>Vous : '+h.you.athName+' · '+h.you.score+' pts<small>Base '+h.you.base+' − fatigue '+(3*h.you.fatigueForScore)+' + équipement '+h.you.equipment+' + soutien '+h.you.instant+' ; '+h.you.cardName+'. Fatigue après : '+h.you.fatigueAfter+'</small></div>'+
+ '<div>Bot : '+h.bot.athName+' · '+h.bot.score+' pts<small>Base '+h.bot.base+' − fatigue '+(3*h.bot.fatigueForScore)+' + équipement '+h.bot.equipment+' + soutien '+h.bot.instant+' ; '+h.bot.cardName+'. Fatigue après : '+h.bot.fatigueAfter+'</small></div>'+
+ '</div><small>Cumul : '+h.cum[0]+' / '+h.cum[1]+'</small></article>').join(''):'<p class="muted">Choisissez votre équipe puis disputez la première étape.</p>';
+}
+function refreshProjection(){
+ if(!game||game.phase==='done')return;
+ const u=game.you,i=game.stage,ath=form.ath,k=form.sup===''?null:Number(form.sup);
+ if(!u.lineup.includes(ath)){el('projection').textContent='Sélectionnez un athlète.';return}
+ if(k!==null&&!supportAllowed(u,ath,i,k)){el('projection').textContent='Soutien non compatible.';return}
+ const v=projection(u,ath,i,k),str='Performance prévisionnelle : '+v.score+' = '+v.base+' (base) − '+(3*v.fatigueForScore)+' (fatigue) + '+v.equipment+' (équipement actif) + '+v.instant+' (soutien immédiat).';
+ el('projection').textContent=str+(v.card==='EV1'?' Second souffle réduit sa fatigue avant le calcul.':'');
+}
+el('codex').innerHTML=SUP.map(s=>'<div class="metric"><strong>'+s.id+' · '+s.name+'</strong><p class="hint">'+s.description+'</p><span class="chip">'+(s.id==='T2'?'INCOMPATIBLE':'ADAPTATION PROPOSÉE')+'</span></div>').join('');
+el('seat').onchange=resetForm;
+el('reset').onclick=resetForm;
+el('start').onclick=start;
+el('export').onclick=()=>{if(!game)return;const x={version:'LAB-v1.1',botDifficulty:game.botDifficulty,status:'EXPERIMENTAL_NOT_CANON',seed:game.seed,you:game.you.k,lineup:game.you.lineup,result:game.phase==='done'?result():null,history:game.history,progress:[game.you.progress,game.bot.progress],fatigue:{you:game.you.fatigue,computer:game.bot.fatigue}};const blob=new Blob([JSON.stringify(x,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='athletic-masters-relais-v11.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+resetForm();
+</script></body></html>
