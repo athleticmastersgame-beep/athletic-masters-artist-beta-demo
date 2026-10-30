@@ -1,0 +1,156 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'none'; img-src data:; object-src 'none'; form-action 'none'">
+<title>ATHLETIC MASTERS — Coût d’opportunité V1.4</title><style>
+:root{font:15px/1.5 system-ui,-apple-system,sans-serif;background:#0a1426;color:#eee9dd}
+*{box-sizing:border-box}body{margin:0}main{max-width:1120px;margin:auto;padding:24px 18px 78px}h1{margin:5px 0 12px;font-size:clamp(28px,4.5vw,43px);line-height:1.1}h2{font-size:20px;margin:0 0 12px}h3{font-size:17px;margin:0 0 8px}a{color:#edd296}.eyebrow{font-size:11px;letter-spacing:1.5px;font-weight:800;color:#e6c889}.muted,.hint{color:#b7c7d8}.hint{font-size:12px}.panel{border:1px solid #40516c;background:#12223a;padding:19px;border-radius:14px;margin-top:17px}.notice{border-color:#ae905c;background:#28283a}.notice strong{color:#f3d59c}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.four{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.metric{background:#1b324b;border:1px solid #4d627b;border-radius:11px;padding:13px}.metric strong{font-size:24px;color:#e9cb90;display:block}.metric span{font-size:12px;color:#c9d4df}
+label{font-size:12px;color:#c3d6e5;display:block;margin-bottom:5px}select,input{font:inherit;color:#f7efe2;background:#203850;border:1px solid #6b8097;border-radius:8px;padding:10px;width:100%}select:focus-visible,input:focus-visible{outline:3px solid #97c9fa;outline-offset:2px}
+.pill{display:inline-block;border:1px solid #ac9160;padding:5px 9px;border-radius:18px;color:#e9ce93;font-size:11px}
+.tablewrap{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:780px;font-size:12px}th{background:#233951;color:#ead098;text-align:left}td,th{padding:11px 9px;border-bottom:1px solid #40546d}td.num{text-align:right;font-variant-numeric:tabular-nums}tr.best{background:#193c3c}tr.unresolved{opacity:.82}td strong{color:#f0d49b}
+.stats{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0}.stats span{border:1px solid #60758a;padding:4px 7px;border-radius:6px;font-size:11px}
+.explanation{border-left:3px solid #d9bd7f;background:#213950;padding:12px 14px;border-radius:8px;margin-top:14px}.small{font-size:12px;color:#c3d2e0}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.controls>*{max-width:310px}.links{display:flex;gap:9px;flex-wrap:wrap}.links a{border:1px solid #93815e;border-radius:8px;padding:8px 13px;text-decoration:none}
+.ok{color:#c3e5cb}.bad{color:#efb1a7}li{margin:6px 0}footer{margin-top:22px;font-size:11px;color:#aebccf}
+@media(max-width:800px){.trio,.four{grid-template-columns:repeat(2,minmax(0,1fr))}.grid{grid-template-columns:1fr}.panel{padding:14px}}@media(max-width:470px){.trio,.four{grid-template-columns:1fr}}
+</style></head><body><main>
+<header><span class="eyebrow">ATHLETIC MASTERS · GAME DESIGN LAB</span><h1>Coût d'opportunité <span style="color:#eac986">V1.4</span></h1><p class="muted">Une énergie en Défi ou en soutien ? Une comparaison exacte, limitée à une manche.</p></header>
+<section class="panel notice"><strong>ETUDE NON CANONIQUE.</strong> Les 12 athlètes LAB-* et les soutiens T1/T3/T4/E1/E2/EV1 sont fictifs. D-01 / D-03 / D-05 restent inchangés pour les anciens playtests, et les effets de soutien D-02 restent proposés. Le comparateur isole <strong>une dépense de 1 énergie à la fois</strong>, face à une défense fixée : il ne simule pas la main réellement piochée, toutes les fenêtres simultanées, les capacités individuelles ou les autres actions du défenseur. Les résultats ne prouvent pas l'équilibrage.</section>
+<section class="panel"><h2>1. Définir une confrontation</h2><div class="grid">
+<div><label for="round">Manche et épreuve</label><select id="round"><option value="0">Manche 1 · FORCE ×2 + TECHNIQUE</option><option value="1">Manche 2 · ENDURANCE ×2 + IMPACT</option><option value="2">Manche 3 · TECHNIQUE ×2 + ENDURANCE</option></select></div>
+<div><label for="side">Équipe qui envisage de dépenser 1 énergie</label><select id="side"><option value="A">Équipe A</option><option value="B">Équipe B</option></select></div>
+<div><label for="mine">Mon titulaire</label><select id="mine"></select></div><div><label for="opp">Titulaire adverse</label><select id="opp"></select></div>
+<div><label for="defense">Défense adverse supposée contre un Défi</label><select id="defense"><option value="0">Sans Parade (+0 TECHNIQUE)</option><option value="1">Parade payée (+1 TECHNIQUE)</option><option value="2">Parade + T2 disponibles (+2 TECHNIQUE)</option></select></div>
+<div><label for="pressure">Pression déjà présente sur le titulaire adverse</label><select id="pressure"><option value="0">0 Pression</option><option value="1">1 Pression — risque de K.O.</option></select></div>
+<div><label for="energy">Mes énergies disponibles maintenant</label><select id="energy"><option value="0">0 énergie</option><option value="1" selected>1 énergie</option><option value="2">2 énergies</option><option value="3">3 énergies</option></select></div>
+<div><label for="behind">Étais-je derrière en PC au début de cette manche ?</label><select id="behind"><option value="no">Non (EV1 donne +1)</option><option value="yes">Oui (EV1 donne +2)</option></select></div>
+<div><label for="activeCost">Coût imprimé d'une éventuelle active — test de budget seulement</label><select id="activeCost"><option value="0">Ne pas considérer l'active</option><option value="1">1 énergie</option><option value="2" selected>2 énergies</option><option value="3">3 énergies</option></select></div>
+<div><label for="replacement">Remplaçant adverse si mon Défi provoque un K.O.</label><select id="replacement"><option value="">Non renseigné — résultat sportif indéterminé</option></select></div></div>
+<div class="trio" id="baseStats" style="margin-top:16px"></div></section>
+<section class="panel"><h2>2. Résultat comparatif des actions</h2><p class="hint">Toutes les options évaluées coûtent 1 énergie, sauf « Passer » (0). Elles sont supposées disponibles en main et jouables au moment de leur fenêtre. Les actions qui se déroulent à des fenêtres différentes sont comparées <strong>a posteriori, à information supposée égale</strong> : ce n'est pas une recommandation de séquence optimale. Un soutien d'Équipement peut être utile plus tard, ce qui n'est pas valorisé ici.</p>
+<div class="tablewrap"><table><thead><tr><th>Action expérimentale</th><th>Coût</th><th>Bonus score sportif</th><th>PC personnels</th><th>Δ PC personnels</th><th>Δ écart PC</th><th>Active encore payable ?</th></tr></thead><tbody id="choices"></tbody></table></div>
+<div id="interpretation" class="explanation" aria-live="polite"></div></section>
+<section class="panel"><h2>3. Comparaison exhaustive des 72 confrontations orientées</h2>
+<div class="controls"><div><label for="compSupport">Soutien à comparer au Défi</label><select id="compSupport"><option value="T3">T3 · Impulsion contrôlée (+1)</option><option value="T4">T4 · Élan initial (+2)</option><option value="T1">T1 · Ajustement (+2, Technique secondaire)</option><option value="E1">E1 · Matériel polyvalent (+1 cette manche)</option><option value="E2">E2 · Matériel technique (+2 si Technique principale)</option><option value="EV1">EV1 · Second souffle (+1/+2)</option></select></div></div>
+<div class="four" id="aggregateStats" style="margin-top:15px"></div><div class="tablewrap"><table style="min-width:550px"><thead><tr><th>Situation comparable</th><th>Nombre sur 72</th><th>Signification</th></tr></thead><tbody id="aggregateRows"></tbody></table></div>
+<p class="hint">Ici, la Pression initiale est supposée nulle pour éviter qu'un K.O. n'invalide le titulaire adverse. Le classement compare la variation d'écart de PC (mes PC moins ceux de l'adversaire), à coût énergétique égal. La valeur future de l'équipement, la probabilité de piocher la carte et l'incertitude sur la Parade ne sont pas incluses.</p></section>
+<section class="panel"><h2>4. Ce qui reste hors de portée du calcul</h2><ul><li><strong>Capacités passives et actives historiques :</strong> le simulateur vérifie uniquement si l'énergie nécessaire à une active éventuelle resterait disponible. Il n'en invente ni le texte ni l'effet.</li><li><strong>Équipements :</strong> les résultats E1/E2 ne comptent que leur bonus immédiat ; leur persistance future pourrait justifier une dépense autrement moins rentable.</li><li><strong>K.O. et remplacement :</strong> si le Défi produit une deuxième Pression, le calcul sportif ne devient comparable qu'après sélection d'un remplaçant. Cela n'évalue pas la récompense de pioche.</li><li><strong>Choix humains :</strong> nous n'avons pas de données de jeu humain permettant d'inférer les probabilités d'une Parade, d'un défi ou d'un soutien disponible.</li></ul>
+<div class="links"><a href="./confrontations-v13.html">Analyse des 72 confrontations V1.3</a><a href="./hybride-v12.html">Championnat V1.2</a><a href="./">Game Lab</a></div></section>
+<footer>ATHLETIC MASTERS · Test numérique V1.4, fixtures uniquement. D-02 toujours non validée ; D-01/D-03/D-05 non modifiées.</footer></main>
+<script>
+"use strict";
+const ATH=[['LAB-A01','Forge',9,7,6,8],['LAB-A02','Tempo',6,8,9,7],['LAB-A03','Prisme',6,9,7,8],['LAB-A04','Éclair',8,6,7,9],['LAB-A05','Équilibre',7,8,8,7],['LAB-A06','Horizon',8,7,8,7],
+['LAB-B01','Acier',8,8,7,7],['LAB-B02','Souffle',7,7,9,7],['LAB-B03','Sillage',6,9,8,7],['LAB-B04','Granite',9,6,7,8],['LAB-B05','Élan',7,8,6,9],['LAB-B06','Azur',8,7,7,8]];
+const A=Object.fromEntries(ATH.map(a=>[a[0],a])),ROUND=[['FORCE','TECHNIQUE'],['ENDURANCE','IMPACT'],['TECHNIQUE','ENDURANCE']],IDX={FORCE:2,TECHNIQUE:3,ENDURANCE:4,IMPACT:5};
+const LABEL={NONE:'Passer / garder mon énergie',CHALLENGE:'Défi (D-05)',T1:'T1 · Ajustement technique',T3:'T3 · Impulsion contrôlée',T4:'T4 · Élan initial',E1:'E1 · Matériel polyvalent',E2:'E2 · Matériel technique',EV1:'EV1 · Second souffle'};
+const OPTIONS=['NONE','CHALLENGE','T1','T3','T4','E1','E2','EV1'];
+const el=id=>document.getElementById(id);
+function ids(side){return ATH.filter(x=>x[0].startsWith('LAB-'+side))}
+function base(a,rd){let r=ROUND[rd];return 2*a[IDX[r[0]]]+a[IDX[r[1]]]}
+function pc(a,b){return a>b?[3,0]:a<b?[0,3]:[1,1]}
+function bonus(option,rd,behind){
+ if(option==='T1')return ROUND[rd][1]==='TECHNIQUE'?2:null;
+ if(option==='T3')return 1;
+ if(option==='T4')return 2;
+ if(option==='E1')return 1;
+ if(option==='E2')return ROUND[rd][0]==='TECHNIQUE'?2:0;
+ if(option==='EV1')return behind?2:1;
+ return 0;
+}
+function evaluate(ath,opp,rd,defense,pressure,behind,energy,replacementId,activeCost){
+ const me=base(ath,rd),rival=base(opp,rd),normal=pc(me,rival),normalMargin=normal[0]-normal[1];
+ return OPTIONS.map(id=>{
+  if(id==='T1'&&bonus(id,rd,behind)===null)return null;
+  const cost=id==='NONE'?0:1,can=energy>=cost;
+  if(!can)return {id,legal:false,reason:'Énergie insuffisante',cost};
+  const hit=id==='CHALLENGE'&&ath[5]>opp[3]+defense;
+  const ko=hit&&pressure===1,rep=ko&&A[replacementId]&&A[replacementId][0]!==opp[0]&&A[replacementId][0].startsWith(opp[0].slice(0,5))?A[replacementId]:null;
+  const sportRival=ko?(rep?base(rep,rd):null):rival;
+  const add=bonus(id,rd,behind),mySport=me+add;
+  const sport=sportRival===null?null:pc(mySport,sportRival);
+  const ownPC=sport===null?null:sport[0]+Number(hit);
+  const oppPC=sport===null?null:sport[1];
+  return {id,cost,legal:true,bonus:add,hit,ko,sportRival,ownPC,oppPC,
+   deltaOwnPC:ownPC===null?null:ownPC-normal[0],
+   deltaNetPC:ownPC===null?null:(ownPC-oppPC)-normalMargin,
+   activePayable:activeCost===0?null:energy-cost>=activeCost};
+ }).filter(Boolean);
+}
+function exactTally(rd,defense,support,behind){
+ const cells=[];
+ for(const a of ids('A'))for(const b of ids('B'))for(const [mine,opponent] of [[a,b],[b,a]]){
+ const result=evaluate(mine,opponent,rd,defense,0,behind,3,'',0);
+ const option=result.find(x=>x.id===support),challenge=result.find(x=>x.id==='CHALLENGE');
+ if(!option)continue;
+ cells.push({option,challenge});
+ }
+ return {pairs:cells.length,supportBetter:cells.filter(x=>x.option.deltaNetPC>x.challenge.deltaNetPC).length,
+ challengeBetter:cells.filter(x=>x.option.deltaNetPC<x.challenge.deltaNetPC).length,
+ equal:cells.filter(x=>x.option.deltaNetPC===x.challenge.deltaNetPC).length,
+ sportOutcomeAffected:cells.filter(x=>x.option.deltaNetPC>0).length,
+ challengeHits:cells.filter(x=>x.challenge.hit).length,
+ meanSupportGain:cells.reduce((s,x)=>s+x.option.deltaNetPC,0)/cells.length,
+ meanChallengeGain:cells.reduce((s,x)=>s+x.challenge.deltaNetPC,0)/cells.length};
+}
+function fillPeople(){
+ const side=el('side').value,opp=side==='A'?'B':'A';
+ el('mine').innerHTML=ids(side).map(x=>'<option value="'+x[0]+'">'+x[1]+' — '+x[0]+'</option>').join('');
+ el('opp').innerHTML=ids(opp).map(x=>'<option value="'+x[0]+'">'+x[1]+' — '+x[0]+'</option>').join('');
+ el('replacement').innerHTML='<option value="">Non renseigné — sportif indéterminé si K.O.</option>'+ids(opp).slice(1).map(x=>'<option value="'+x[0]+'">'+x[1]+'</option>').join('');
+}
+function fixReplacement(){
+ const side=el('side').value==='A'?'B':'A',enemy=el('opp').value,previous=el('replacement').value;
+ el('replacement').innerHTML='<option value="">Non renseigné — sportif indéterminé si K.O.</option>'+
+ ids(side).filter(x=>x[0]!==enemy).map(x=>'<option value="'+x[0]+'" '+(x[0]===previous?'selected':'')+'>'+x[1]+'</option>').join('');
+ if(previous===enemy)el('replacement').value='';
+}
+function n(x){return x===null?'—':String(x)}
+function signed(x){return x===null?'—':x>0?'+'+x:String(x)}
+function render(){
+ const rd=Number(el('round').value),mine=A[el('mine').value],opp=A[el('opp').value];
+ if(!mine||!opp)return;
+ const defense=Number(el('defense').value),pressure=Number(el('pressure').value),energy=Number(el('energy').value),behind=el('behind').value==='yes';
+ const repl=el('replacement').value,activeCost=Number(el('activeCost').value);
+ const start=base(mine,rd),oppScore=base(opp,rd),initial=pc(start,oppScore);
+ el('baseStats').innerHTML='<div class="metric"><span>Votre score brut</span><strong>'+start+'</strong><span>'+mine[1]+'</span></div>'+
+ '<div class="metric"><span>Score brut adverse</span><strong>'+oppScore+'</strong><span>'+opp[1]+'</span></div>'+
+ '<div class="metric"><span>PC sportifs avant action</span><strong>'+initial[0]+' / '+initial[1]+'</strong><span>Vous / adversaire</span></div>';
+ const rows=evaluate(mine,opp,rd,defense,pressure,behind,energy,repl,activeCost);
+ const comparable=rows.filter(x=>x.legal&&x.deltaNetPC!==null);const max=Math.max(...comparable.map(x=>x.deltaNetPC));
+ el('choices').innerHTML=rows.map(x=>{
+ const best=x.legal&&x.deltaNetPC!==null&&x.deltaNetPC===max&&x.id!=='NONE';
+ return '<tr class="'+(best?'best':x.deltaNetPC===null?'unresolved':'')+'"><td><strong>'+LABEL[x.id]+'</strong>'+
+ (x.id==='CHALLENGE'&&x.hit?'<div class="hint">Défi réussi : +1 PC tactique, '+(x.ko?'K.O.':'1 Pression')+'</div>':'')+
+ (x.id==='E1'||x.id==='E2'?'<div class="hint">Bonus futur non inclus</div>':'')+
+ (x.id==='T4'?'<div class="hint">PRÉPARATION, perdu si K.O.</div>':'')+'</td>'+
+ '<td class="num">'+x.cost+'</td><td class="num">'+(x.legal?signed(x.bonus):'—')+'</td>'+
+ '<td class="num">'+(x.legal?n(x.ownPC):'—')+'</td>'+
+ '<td class="num">'+(x.legal?signed(x.deltaOwnPC):'—')+'</td>'+
+ '<td class="num">'+(x.legal?signed(x.deltaNetPC):'—')+'</td>'+
+ '<td>'+(x.legal?activeCost===0?'Sans objet':x.activePayable?'<span class="ok">Oui</span>':'<span class="bad">Non</span>':'Illégal')+'</td></tr>';
+ }).join('');
+ const ch=rows.find(x=>x.id==='CHALLENGE');
+ let advice='';
+ if(!ch.legal)advice='Aucune action coûtant 1 énergie ne peut être payée avec votre réserve actuelle.';
+ else if(ch.ko&&!repl)advice='Le Défi entraîne un K.O. : choisissez le remplaçant adverse pour comparer les PC sportifs. Le bonus de pioche après K.O. et ses effets futurs ne sont pas chiffrés.';
+ else advice='Dans ce scénario, le Défi '+(ch.hit?'réussit et rapporte immédiatement +1 PC tactique.':'échoue et ne rapporte pas de PC tactique.')+
+ ' Le tableau compare la variation de PC par rapport à une manche sans action ; il ne garantit pas la disponibilité des soutiens.';
+ el('interpretation').innerHTML='<strong>Lecture de la situation :</strong> '+advice+
+ '<p class="small">Énergie initiale : '+energy+'. Le Défi consomme 1 énergie même s’il échoue. Une active de coût '+activeCost+' n’est pas évaluée dans les PC : seule sa possibilité de paiement est indiquée.</p>';
+ const key=el('compSupport').value;
+ const stats=exactTally(rd,defense,key,behind);
+ el('aggregateStats').innerHTML=[
+ ['Confrontations évaluées',stats.pairs],
+ ['Soutien supérieur',stats.supportBetter],
+ ['Défi supérieur',stats.challengeBetter],
+ ['Même gain',stats.equal]
+ ].map(v=>'<div class="metric"><span>'+v[0]+'</span><strong>'+v[1]+'</strong></div>').join('');
+ const detail=[['Soutien meilleur',stats.supportBetter,'Gain d’écart de PC strictement supérieur au Défi'],
+ ['Défi meilleur',stats.challengeBetter,'Gain d’écart de PC strictement supérieur au soutien'],
+ ['À égalité',stats.equal,'Même gain de PC dans ce modèle'],
+ ['Défis réussis',stats.challengeHits,'Le Défi rapporte 1 PC tactique et une Pression, sans K.O. initial'],
+ ['Soutiens modifiant les PC sportifs',stats.sportOutcomeAffected,'Nombre de confrontations où le soutien change au moins un PC sportif']];
+ el('aggregateRows').innerHTML=detail.map(r=>'<tr><td>'+r[0]+'</td><td class="num"><strong>'+r[1]+'</strong></td><td>'+r[2]+'</td></tr>').join('');
+}
+for(const k of ['round','mine','opp','defense','pressure','energy','behind','activeCost','replacement','compSupport'])el(k).onchange=()=>{if(k==='opp')fixReplacement();render()};
+el('side').onchange=()=>{fillPeople();fixReplacement();render()};
+fillPeople();fixReplacement();render();
+</script></body></html>
