@@ -50,7 +50,7 @@ Object.entries(s.effects).map(([mode,effect])=>'<div class="mode"><b>'+({champio
 function render(){
 const mode=el('modeFilter').value;
 const aths=ATH.filter(_=>selectedType!=='sup'&&mode!=='blocked');
-const sups=SUP.filter(s=>selectedType!=='ath'&&(mode==='all'||mode==='blocked'&&Object.values(s.effects).some(v=>v===null)||s.effects[mode]!==null));
+const sups=SUP.filter(s=>selectedType!=='ath'&&(mode==='all'||(mode==='blocked'?Object.values(s.effects).some(v=>v===null):s.effects[mode]!==null)));
 const cards=[...aths.map(athleteCard),...sups.map(supportCard)];
 el('cards').innerHTML=cards.join('')||'<p class="empty">Aucune carte ne correspond à ces filtres.</p>';
 el('count').textContent=cards.length+' entrée(s) visibles · '+ATH.length+' athlètes fictifs · '+SUP.length+' identités de soutiens.';
