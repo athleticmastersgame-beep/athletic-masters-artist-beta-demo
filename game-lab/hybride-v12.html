@@ -31,7 +31,7 @@ ul{padding-left:22px}li{margin:5px 0}.divider{border-top:1px solid #3c4d63;margi
 @media(max-width:760px){.grid{grid-template-columns:1fr}.team{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:15px 11px 50px}.panel{padding:15px}.trio{grid-template-columns:1fr 1fr}}
 </style></head><body><main>
 <header><div><span class="eyebrow">ATHLETIC MASTERS / GAME DESIGN LAB</span><h1>Championnat hybride <span style="color:#e8c784">V1.2</span></h1><div class="muted">Un moteur hybride, plusieurs fenêtres tactiques.</div></div><span class="pill">DÉMONSTRATION NON CANONIQUE</span></header>
-<section class="panel notice"><strong>RÈGLES DE LABORATOIRE — NON OFFICIELLES.</strong> Nouveauté V0.8 : deux soutiens dans une même fenêtre et équipements ciblant tout athlète disponible. D-01, D-03 et D-05 servent de référence pour anciens playtests ; les soutiens D-02 restent une proposition. Toutes les cartes sont fictives. Les capacités des athlètes historiques, le Capitaine et certains choix d'arbitrage ne sont pas inclus. Aucun dépôt ni donnée envoyé sur un serveur.</section>
+<section class="panel notice"><strong>RÈGLES DE LABORATOIRE — NON OFFICIELLES.</strong> Nouveauté V1.2 : trois politiques d’ordinateur et télémétrie de match. Les règles D-02 restent proposées et les cartes fictives. D-01, D-03 et D-05 servent de référence pour anciens playtests ; les soutiens D-02 restent une proposition. Toutes les cartes sont fictives. Les capacités des athlètes historiques, le Capitaine et certains choix d'arbitrage ne sont pas inclus. Aucun dépôt ni donnée envoyé sur un serveur.</section>
 <section class="panel"><h2>1. Configurer une partie numérique</h2><div class="trio">
 <div><label for="mode">Gameplay</label><select id="mode"><option value="hybrid">Championnat hybride — proposition D-02 V1.2</option></select></div>
 <div><label for="seat">Votre équipe</label><select id="seat"><option value="A">Équipe A · Forge</option><option value="B">Équipe B · Acier</option></select></div>
@@ -276,7 +276,7 @@ s+='<p class="hint">Sélection simultanée. Un athlète non K.O. peut revenir à
 '<button id="reveal" class="primary" style="margin-top:12px">Révéler les titulaires</button>';
 }else if(g.phase==='done'){
 s+='<div class="status"><strong>'+result()+'</strong><p>PC : '+u.pc+' à '+b.pc+
-' · Performance brute cumulée : '+u.brut+' à '+b.brut+' · Manches sportives : '+u.won+' à '+b.won+'</p></div>'+
+' · Performance brute cumulée : '+u.brut+' à '+b.brut+' · Manches sportives : '+u.won+' à '+b.won+'</p><p class="hint">Défis joueur/bot : '+g.telemetry.challenge.player+'/'+g.telemetry.challenge.bot+' · Réussites : '+g.telemetry.hit.player+'/'+g.telemetry.hit.bot+' · K.O. provoqués : '+g.telemetry.ko.player+'/'+g.telemetry.ko.bot+' · Soutiens : '+g.telemetry.support.player+'/'+g.telemetry.support.bot+'.</p></div>'+
 '<button id="again" class="primary" style="margin-top:12px">Rejouer (même graine)</button>';
 }else{
 s+='<div class="status">Vous : <strong>'+(u.ath?A[u.ath][1]:'K.O. — remplacement requis')+'</strong>'+
