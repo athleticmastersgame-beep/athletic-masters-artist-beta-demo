@@ -1,0 +1,71 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'none'; img-src data:; object-src 'none'; form-action 'none'">
+<title>ATHLETIC MASTERS — Codex de laboratoire V1.0</title>
+<style>
+:root{font:15px/1.5 system-ui,-apple-system,sans-serif;background:#091326;color:#f1ebdf}*{box-sizing:border-box}body{margin:0}main{max-width:1090px;margin:auto;padding:25px 17px 80px}h1{font-size:clamp(26px,5vw,42px);margin:8px 0}h2{font-size:22px;margin:0 0 12px}h3{font-size:17px;margin:0 0 6px}.muted,.hint{color:#c0cede}.hint{font-size:12px}.eyebrow{font-size:11px;font-weight:800;color:#e3c88e;letter-spacing:1.5px}.panel{background:#142339;border:1px solid #485a70;border-radius:14px;padding:20px;margin:15px 0}.warning{background:#262737;border-color:#ac9061}.warning strong{color:#efd18b}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.card{padding:16px;border:1px solid #556a80;background:#1a3148;border-radius:12px}.card h3{color:#e4cc98}.tiny{font-size:11px;color:#a9bfd1}.label{display:inline-block;border:1px solid #687a8b;border-radius:18px;padding:3px 8px;font-size:11px;margin:3px 3px 3px 0}.label.no{color:#f0ad9e;border-color:#a95b60}.label.yes{color:#bfe1b1;border-color:#5b8c7a}.label.adapt{color:#e8d094;border-color:#a28b61}.modes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:9px}.mode{background:#223b54;border:1px solid #48617a;border-radius:8px;padding:9px}.mode b{display:block;font-size:11px;margin-bottom:4px}.mode span{font-size:12px;color:#d5e0e9}.stat{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.stat span{border:1px solid #60778b;padding:3px 7px;border-radius:6px;font-size:11px}
+button,select{border:1px solid #70839a;background:#233a51;color:#f4efe7;padding:10px 13px;border-radius:8px;font:inherit;cursor:pointer}button.active{background:#e3c98a;color:#122033;border-color:#e3c98a;font-weight:750}button:focus-visible,select:focus-visible{outline:3px solid #91caff;outline-offset:3px}
+a{color:#f0d18e}.navlinks{display:flex;flex-wrap:wrap;gap:10px}.navlinks a{border:1px solid #8a764c;padding:8px 12px;border-radius:8px;text-decoration:none}.empty{color:#b5c8d5}footer{font-size:11px;color:#a8b8c9;margin-top:18px}
+@media(max-width:730px){.grid{grid-template-columns:1fr}.modes{grid-template-columns:1fr}.panel{padding:14px}}
+</style></head><body><main>
+<div class="eyebrow">ATHLETIC MASTERS · GAME DESIGN LAB · 30/10/2026</div><h1>Codex universel <span style="color:#e9ce91">V1.0</span></h1><p class="muted">Un référentiel expérimental de cartes communes aux trois moteurs numériques, avec leurs usages spécifiques.</p>
+<section class="panel warning"><strong>EXCLUSIVEMENT FICTIF — PAS UN CATALOGUE OFFICIEL.</strong> Les 12 athlètes LAB-A/B et les 7 identités de soutiens sont des fixtures de développement. Les effets présentés sont proposés pour ces laboratoires. Ils ne remplacent ni les capacités canoniques historiques, ni les briefs des artistes, ni les règles validées dans les documents V4.</section>
+<section class="panel"><h2>Trois jeux, une seule identité de carte</h2><div class="navlinks"><a href="./hybride-v08.html">Championnat hybride V0.8</a><a href="./conquete-v10.html">Conquête des Arènes V0.8</a><a href="./relais-v10.html">Relais des Champions V1.0</a></div><p class="hint">La rareté et le style artistique restent indépendants de la puissance de jeu. L'identité mécanique, les impressions illustrées et la version des règles doivent être suivies séparément.</p></section>
+<section class="panel"><h2>Paquets de laboratoire autorisés selon le mode</h2>
+<p class="muted">Les <strong>19 identités fictives</strong> restent dans le Codex commun. Mais tous les soutiens ne sont pas distribués dans chaque jeu. Cela évite d'imposer aux joueurs des cartes sans effet.</p>
+<div class="grid">
+<div class="card"><h3>Championnat hybride V0.8</h3><div class="label yes">14 soutiens</div>
+<p class="hint">T1, T2, T3, T4, E1, E2, EV1 — 2 exemplaires chacun.</p><p class="tiny">Six athlètes visibles dans l'équipe de laboratoire.</p></div>
+<div class="card"><h3>Conquête des Arènes V1.0</h3><div class="label adapt">12 soutiens compatibles</div>
+<p class="hint">T1, T3, T4, E1, E2, EV1 — 2 exemplaires chacun. T2 est exclue car il n'y a pas de Parade.</p><p class="tiny">Six athlètes disponibles, utilisés pour déployer ou repositionner.</p></div>
+<div class="card"><h3>Relais des Champions V1.0</h3><div class="label adapt">12 soutiens compatibles</div>
+<p class="hint">T1, T3, T4, E1, E2, EV1 — 2 exemplaires chacun. T2 est exclue car il n'y a pas de Parade.</p><p class="tiny">Trois titulaires choisis parmi six.</p></div>
+</div><p class="hint">Ces tailles de paquets sont des <strong>formats de laboratoire</strong>, pas des règles commerciales. La collection peut réunir davantage de cartes que chaque deck autorisé.</p></section>
+<section class="panel"><h2>Rechercher une carte</h2><div class="row"><button id="all" class="active">Toutes (19)</button><button id="ath">Athlètes (12)</button><button id="sup">Soutiens (7)</button><select id="modeFilter" aria-label="Filtrer par compatibilité du mode"><option value="all">Tous les modes</option><option value="championnat">Championnat</option><option value="conquete">Conquête</option><option value="relais">Relais</option><option value="blocked">Non compatibles dans au moins un mode</option></select></div><p id="count" class="hint"></p><div class="grid" id="cards"></div></section>
+<section class="panel"><h2>Règles d'architecture du Codex</h2><ol>
+<li><strong>Identité mécanique stable</strong> : une entrée correspond à une identité de jeu. L'œuvre, l'édition et la version imprimée auront des identifiants distincts.</li>
+<li><strong>Règlement versionné</strong> : chaque moteur définit ses ressources, ses scores, ses interactions et les éventuelles adaptations des capacités.</li>
+<li><strong>Compatibilité explicite</strong> : une carte est UTILISABLE, ADAPTÉE, INACTIVE ou INTERDITE dans un mode donné ; aucun effet par défaut ne doit être deviné.</li>
+<li><strong>Histoire sourcée</strong> : la future fiche d'un véritable athlète contiendra des sources vérifiées, les exploits retenus, les dates et les notes juridiques. Ces données sont absentes du laboratoire.</li>
+<li><strong>Contrôle avant impression</strong> : les artistes créeront une carte entière à partir d'une fiche verrouillée ; les modes expérimentaux ne constituent pas encore des instructions de production.</li>
+</ol></section>
+<footer>Codex V1.0 · laboratoire expérimental uniquement · ATHLETIC MASTERS. Aucune carte historique officielle créée.</footer>
+</main><script>
+"use strict";
+const ATH=[['LAB-A01','Forge',9,7,6,8],['LAB-A02','Tempo',6,8,9,7],['LAB-A03','Prisme',6,9,7,8],['LAB-A04','Éclair',8,6,7,9],['LAB-A05','Équilibre',7,8,8,7],['LAB-A06','Horizon',8,7,8,7],['LAB-B01','Acier',8,8,7,7],['LAB-B02','Souffle',7,7,9,7],['LAB-B03','Sillage',6,9,8,7],['LAB-B04','Granite',9,6,7,8],['LAB-B05','Élan',7,8,6,9],['LAB-B06','Azur',8,7,7,8]];
+const SUP=[
+{id:'T1',name:'Ajustement technique',type:'Technique',effects:{championnat:'Si Technique est secondaire : +2 à la performance.',conquete:'+2 en arène Technique pendant ce tour.',relais:'+2 si Technique est la statistique secondaire.'}},
+{id:'T2',name:'Parade préparée',type:'Technique',effects:{championnat:'Avec une Parade payée : +1 Technique défensive supplémentaire.',conquete:null,relais:null}},
+{id:'T3',name:'Impulsion contrôlée',type:'Technique',effects:{championnat:'+1 à la performance finale.',conquete:'+1 dans l’arène jouée pour ce tour.',relais:'+1 à la progression de l’étape.'}},
+{id:'T4',name:'Élan initial',type:'Technique',effects:{championnat:'+2 pour la manche sur le titulaire préparé, perdu en cas de K.O.',conquete:'+2 pour ce tour si l’athlète vient d’être déployé.',relais:'+2 si l’athlète est engagé pour la première fois.'}},
+{id:'E1',name:'Matériel polyvalent',type:'Équipement',effects:{championnat:'+1 aux performances si l’athlète reste disponible.',conquete:'+1 permanent à la valeur de l’arène du porteur.',relais:'+1 permanent à la progression de chaque engagement.'}},
+{id:'E2',name:'Matériel technique',type:'Équipement',effects:{championnat:'+2 si Technique est la statistique principale.',conquete:'+2 en arène Technique pour le porteur.',relais:'+2 si Technique est la principale de l’étape.'}},
+{id:'EV1',name:'Second souffle',type:'Événement',effects:{championnat:'+2 si l’équipe était derrière au début de la manche ; sinon +1.',conquete:'+2 si l’équipe était derrière au début du tour ; sinon +1.',relais:'Réduit la fatigue du titulaire de 1 avant le calcul de progression.'}}
+];
+const el=id=>document.getElementById(id);
+let selectedType='all';
+function safe(x){return String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function athleteCard(a){
+const id=a[0];return '<article class="card"><div class="tiny">'+id+' · ATHLÈTE FICTIF</div><h3>'+safe(a[1])+'</h3>'+
+'<div class="stat"><span>FOR '+a[2]+'</span><span>TEC '+a[3]+'</span><span>END '+a[4]+'</span><span>IMP '+a[5]+'</span></div>'+
+'<p class="hint">Total de statistiques : 30. Les trois jeux utilisent les mêmes quatre valeurs. Aucune capacité passive/active historique n’a été inventée.</p>'+
+'<span class="label yes">ATHLÈTE · 3 MODES</span></article>';
+}
+function supportCard(s){
+return '<article class="card"><div class="tiny">'+s.id+' · '+s.type.toUpperCase()+' FICTIVE</div><h3>'+safe(s.name)+'</h3><div class="modes">'+
+Object.entries(s.effects).map(([mode,effect])=>'<div class="mode"><b>'+({championnat:'Championnat',conquete:'Conquête',relais:'Relais'}[mode])+'</b>'+
+'<span class="label '+(!effect?'no':mode==='championnat'?'yes':'adapt')+'">'+(!effect?'INCOMPATIBLE':mode==='championnat'?'UTILISABLE · LAB':'ADAPTÉ · LAB')+'</span>'+
+'<span>'+safe(effect||'Aucun effet légal dans ce mode ; carte à retirer d’un deck adapté.')+'</span></div>').join('')+
+'</div></article>';
+}
+function render(){
+const mode=el('modeFilter').value;
+const aths=ATH.filter(_=>selectedType!=='sup'&&mode!=='blocked');
+const sups=SUP.filter(s=>selectedType!=='ath'&&(mode==='all'||(mode==='blocked'?Object.values(s.effects).some(v=>v===null):s.effects[mode]!==null)));
+const cards=[...aths.map(athleteCard),...sups.map(supportCard)];
+el('cards').innerHTML=cards.join('')||'<p class="empty">Aucune carte ne correspond à ces filtres.</p>';
+el('count').textContent=cards.length+' entrée(s) visibles · '+ATH.length+' athlètes fictifs · '+SUP.length+' identités de soutiens.';
+for(const k of ['all','ath','sup'])el(k).className=k===selectedType?'active':'';
+}
+for(const k of ['all','ath','sup'])el(k).onclick=()=>{selectedType=k;render()};
+el('modeFilter').onchange=render;render();
+</script></body></html>
