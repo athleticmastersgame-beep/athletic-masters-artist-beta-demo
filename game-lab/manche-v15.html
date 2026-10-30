@@ -182,6 +182,9 @@ function view(){
  const ctx=initial(),result=enumerate(ctx);latest={version:'LAB-1.5',status:'EXPERIMENTAL_NOT_CANON',context:ctx,results:result};
  const all=result.all,determinate=all.filter(p=>!p.unresolved);
  const best=determinate.length?determinate[0].net:null;
+ const pass=determinate.find(p=>p.spent===0&&!p.challenge&&!p.parry&&p.used===0);
+ const incremental=best!==null&&pass?best-pass.net:null;
+ const cheapestBest=best===null?null:Math.min(...determinate.filter(p=>p.net===best).map(p=>p.spent));
  const maxFuture=all.length?Math.max(...all.map(p=>p.future)):0;
  el('metrics').innerHTML=
  '<div class="metric"><span>Combinaisons légales distinctes</span><b>'+all.length+'</b></div>'+
@@ -195,6 +198,7 @@ function view(){
  '<td class="num">'+(p.unresolved?'indéterminé':(p.net>0?'+':'')+p.net)+'</td>'+
  '<td class="num">'+(p.future?'+'+p.future+' conditionnels':'0')+'</td></tr>').join('');
  el('explain').innerHTML='<strong>Lecture :</strong> les écarts de PC sont calculés après les effets connus de cette manche. '+
+ 'Meilleur écart vs simple passage : '+(incremental===null?'indéterminé':(incremental>0?'+':'')+incremental)+' PC net ; dépense minimale pour atteindre le meilleur écart : '+(cheapestBest===null?'—':cheapestBest+' énergie(s)')+'. '+
  'Un plan à +'+maxFuture+' de bonus sportif futur potentiel ne garantit aucun point futur : il suppose que l’athlète équipé soit engagé lors des manches restantes et conserve son équipement. '+
  'La réserve pour l’active n’accorde aucun effet. '+(result.undetermined?'Certains scénarios exigent un remplaçant pour déterminer les PC.':'Tous les scores des scénarios affichés sont déterminés.');
  el('error').textContent='';
