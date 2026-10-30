@@ -1,0 +1,189 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"><title>ATHLETIC MASTERS — Conquête des Arènes LAB V1.0</title>
+<style>
+:root{font:15px/1.5 system-ui,-apple-system,sans-serif;background:#091326;color:#eee8df}*{box-sizing:border-box}body{margin:0}main{max-width:1140px;margin:auto;padding:23px 16px 70px}h1{margin:6px 0;font-size:clamp(26px,4.5vw,39px);line-height:1.12}h2{font-size:19px;margin:0 0 12px}h3{font-size:15px;margin:0 0 7px}.eyebrow{color:#e5c57b;font-size:11px;letter-spacing:1.4px;font-weight:800;text-transform:uppercase}.muted,.hint{color:#afc0d2}.hint{font-size:12px}.panel{background:#122038;border:1px solid #394d64;padding:19px;border-radius:14px;margin:16px 0}.warning{border-color:#ac8c55;background:#28273a}.warning strong{color:#e4c98d}.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.between{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.metric{border:1px solid #344a63;background:#1a2c45;padding:13px;border-radius:11px}.metric b{display:block;font-size:25px;color:#ecd18f}.arena{border:1px solid #6a7d98;background:#142740;border-radius:13px;padding:13px;min-height:205px}.arena h3{font-size:18px}.arena small{font-size:11px}.athleteline{border-left:3px solid #7caed8;background:#263e55;padding:7px 9px;border-radius:5px;margin:6px 0;font-size:12px}.athleteline.bot{border-left-color:#d0a77b}.scoreline{display:flex;justify-content:space-between;gap:6px;margin:9px 0;color:#eed79e;font-weight:800}.pill{border:1px solid #b6a070;color:#f2d58e;padding:5px 8px;border-radius:20px;font-size:11px}button,select,input{font:inherit}button,select,input[type=number]{border:1px solid #61748b;background:#213854;color:#f6f0e8;padding:11px;border-radius:8px}button{cursor:pointer;font-weight:750}button:hover:not(:disabled){background:#39516b}button:disabled{opacity:.45;cursor:not-allowed}.primary{background:#e7cc8b;color:#142136;border-color:#e7cc8b}.primary:hover:not(:disabled){background:#f7e2b0;color:#142136}label{font-size:12px;display:block;margin:7px 0;color:#d7e2ed}select,input[type=number]{width:100%}.note{background:#1c3450;border-left:3px solid #dfc182;padding:10px 13px;border-radius:7px}.log{max-height:380px;overflow:auto}.log p{padding:9px 0;border-bottom:1px solid #34465b;margin:0;font-size:13px}li{margin:5px 0}footer{margin-top:25px;font-size:11px;color:#aebaca}.tag{font-size:11px;color:#eacb7f}a{color:#f1d58d}
+@media(max-width:760px){.grid,.cols{grid-template-columns:1fr}.panel{padding:14px}.arena{min-height:110px}}
+</style></head>
+<body><main><header class="between"><div><span class="eyebrow">ATHLETIC MASTERS / GAME DESIGN LAB</span><h1>Conquête des Arènes <span style="color:#e6c681">V1.1</span></h1><p class="muted">Un deuxième gameplay : déploiement, repositionnement et contrôle de trois arènes.</p></div><span class="pill">PROTOTYPE NUMÉRIQUE</span></header>
+<section class="panel warning"><strong>NON CANONIQUE — expérience de game design.</strong> Vous jouez avec exactement les 12 athlètes LAB-* et les 7 identités de soutiens fictives du Championnat hybride. Les effets des soutiens sont interprétés ici par un <strong>règlement spécifique à ce mode</strong>. La Technique « Parade préparée » (T2) n'est pas compatible avec ce mode : elle est exclue du paquet de Conquête, mais reste référencée dans le Codex. Aucune carte historique ni donnée officielle n'est modifiée.</section>
+<section class="panel"><h2>1. Configurer</h2><div class="grid"><div><label for="side">Votre équipe</label><select id="side"><option value="A">Forge — équipe A</option><option value="B">Acier — équipe B</option></select></div><div><label for="seed">Graine reproductible</label><input id="seed" type="number" min="1" max="2147483647" value="20261030"></div><div><label for="botDifficulty">Politique de l’ordinateur</label><select id="botDifficulty"><option value="discovery">Exploration</option><option value="greedy" selected>Réactif</option><option value="planner">Planificateur</option></select></div><div><button class="primary" id="reset">Nouvelle partie</button></div></div><div class="row" style="margin-top:14px"><button id="export" disabled>Exporter le journal JSON</button><span class="hint">Jeu local, sans serveur ni connexion.</span></div></section>
+<div class="grid" id="summary"></div>
+<section class="panel"><div class="between"><h2>2. Plateau — trois arènes</h2><span class="pill" id="roundBadge">Tour 1 / 4</span></div><p class="hint">Le plateau affiche la force actuelle hors bonus temporaires des tours terminés. Le journal indique les points attribués à chaque tour, bonus compris.</p><div class="grid" id="board"></div></section>
+<section class="panel"><h2>3. Votre décision</h2><div id="decision"></div></section>
+<section class="panel"><h2>4. Journal des actions</h2><div id="history" class="log"></div></section>
+<section class="panel"><h2>Règles du laboratoire</h2><ul>
+<li>Quatre tours. Chaque joueur choisit simultanément un athlète et une arène, sans connaître la décision adverse.</li>
+<li>Au choix : <strong>déployer</strong> un athlète encore en réserve, ou <strong>repositionner</strong> un athlète déjà sur une autre arène. Une action sportive par tour.</li>
+<li>Chaque arène compare la somme de sa statistique (FORCE, TECHNIQUE ou ENDURANCE) des athlètes présents. En cas d'égalité de points de performance, la somme des valeurs <strong>IMPACT</strong> départage ; double égalité = arène contestée.</li>
+<li>À la fin de chaque tour, une arène contrôlée rapporte <strong>1 point de prestige</strong>. Quatre tours maximum, douze points théoriques attribuables.</li>
+<li>Chaque joueur possède un paquet de <strong>12 soutiens compatibles</strong> (6 Techniques, 4 Équipements, 2 Événements), identités identiques à celles du Championnat. Main de 4 puis +1 au début des tours 2–4. Au plus <strong>1 soutien par tour</strong> ; maximum <strong>2 énergies par tour</strong>.</li>
+<li>Les Équipements restent attachés à l'athlète s'il change d'arène, avec un maximum d'un par athlète. Les bonus des Techniques et Événements sont temporaires, uniquement pour le tour courant.</li>
+<li>Départage final : total de prestige, puis nombre d'arènes contrôlées au tour 4, puis différence des forces sportives finales cumulées ; sinon nul.</li>
+<li><strong>Mode expérimental :</strong> les libellés et compatibilités des cartes sont définis dans ce livret, non sur des illustrations officielles. L'intelligence artificielle applique une politique heuristique simple ; ce prototype ne démontre pas l'équilibrage.</li>
+</ul><div id="codex"></div></section>
+<footer>ATHLETIC MASTERS — GAME DESIGN LAB · V1.0 · cartes et effets LAB-* fictifs · aucun transfert de droit ni vente.</footer>
+</main>
+<script>
+"use strict";
+const ATH=[['LAB-A01','Forge',9,7,6,8],['LAB-A02','Tempo',6,8,9,7],['LAB-A03','Prisme',6,9,7,8],['LAB-A04','Éclair',8,6,7,9],['LAB-A05','Équilibre',7,8,8,7],['LAB-A06','Horizon',8,7,8,7],['LAB-B01','Acier',8,8,7,7],['LAB-B02','Souffle',7,7,9,7],['LAB-B03','Sillage',6,9,8,7],['LAB-B04','Granite',9,6,7,8],['LAB-B05','Élan',7,8,6,9],['LAB-B06','Azur',8,7,7,8]];
+const SUP=[
+{id:'T1',name:'Ajustement technique',type:'Technique',cost:1,note:'+2 en arène TECHNIQUE pour le tour.'},
+{id:'T2',name:'Parade préparée',type:'Technique',cost:0,note:'Incompatible : aucune Parade dans Conquête.'},
+{id:'T3',name:'Impulsion contrôlée',type:'Technique',cost:1,note:'+1 dans l’arène jouée pour le tour.'},
+{id:'T4',name:'Élan initial',type:'Technique',cost:1,note:'+2 pour ce tour si l’athlète est nouvellement déployé.'},
+{id:'E1',name:'Matériel polyvalent',type:'Équipement',cost:2,note:'+1 permanent à la statistique de l’arène de son porteur.'},
+{id:'E2',name:'Matériel technique',type:'Équipement',cost:2,note:'+2 permanent lorsque le porteur se trouve en arène TECHNIQUE.'},
+{id:'EV1',name:'Second souffle',type:'Événement',cost:1,note:'+2 ce tour si vous avez moins de prestige ; sinon +1.'}];
+const S=Object.fromEntries(SUP.map(s=>[s.id,s])),A=Object.fromEntries(ATH.map(a=>[a[0],a]));
+const DECK=['T1','T1','T3','T3','T4','T4','E1','E1','E2','E2','EV1','EV1'];
+const LANES=[{id:'FORCE',stat:2,title:'Force'},{id:'TECHNIQUE',stat:3,title:'Technique'},{id:'ENDURANCE',stat:4,title:'Endurance'}];
+const L=Object.fromEntries(LANES.map(l=>[l.id,l]));
+const el=id=>document.getElementById(id);let game=null,form={actor:null,lane:'FORCE',sup:''},rng=()=>Math.random();
+function seeded(seed){let t=seed>>>0;return function(){t+=0x6d2b79f5;let a=t;a=Math.imul(a^(a>>>15),a|1);a^=a+Math.imul(a^(a>>>7),a|61);return ((a^(a>>>14))>>>0)/4294967296}}
+function shuffle(x){x=x.slice();for(let i=x.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[x[i],x[j]]=[x[j],x[i]]}return x}
+function player(side){return {side,ids:ATH.filter(x=>x[0].startsWith('LAB-'+side)).map(x=>x[0]),positions:{},gear:{},hand:[],deck:shuffle(DECK),spent:[],prestige:0,temp:null}}
+function draw(p,n){while(n-->0&&p.deck.length)p.hand.push(p.deck.pop())}
+function owned(p,id){return p.ids.includes(id)}
+function deployment(p,id){return Object.prototype.hasOwnProperty.call(p.positions,id)}
+function legalAction(p,id,lane){return !!A[id]&&owned(p,id)&&!!L[lane]&&p.positions[id]!==lane}
+function compat(p,id,lane,card){if(!S[card]||!legalAction(p,id,lane)||card==='T2')return false;if(card==='T1'&&lane!=='TECHNIQUE')return false;if(card==='T4'&&deployment(p,id))return false;if((card==='E1'||card==='E2')&&p.gear[id])return false;return true}
+function choices(p,id,lane){const arr=[];for(let i=0;i<p.hand.length;i++)if(compat(p,id,lane,p.hand[i]))arr.push({i,id:p.hand[i]});return arr}
+function supportValue(p,card){return S[card]?.cost||0}
+function validate(p,id,lane,supIndex){if(!legalAction(p,id,lane))return 'Choisissez un athlète et une nouvelle arène.';if(supIndex!==null){if(!Number.isInteger(supIndex)||supIndex<0||supIndex>=p.hand.length)return 'Carte indisponible.';if(!compat(p,id,lane,p.hand[supIndex]))return 'Carte non compatible avec cette action.';if(S[p.hand[supIndex]].cost>2)return 'Coût supérieur aux 2 énergies de ce tour.';}return ''}
+function actionLabel(p,id,lane){return (deployment(p,id)?'repositionne':'déploie')+' '+A[id][1]+' sur '+L[lane].title}
+function apply(p,id,lane,supIndex){
+const err=validate(p,id,lane,supIndex);if(err)throw Error(err);
+const fresh=!deployment(p,id);p.positions[id]=lane;p.temp=null;
+let used=null;
+if(supIndex!==null){
+const sc=p.hand.splice(supIndex,1)[0];p.spent.push(sc);used=sc;
+if(sc==='E1'||sc==='E2')p.gear[id]=sc;
+else {let bonus=sc==='T1'?2:sc==='T3'?1:sc==='T4'&&fresh?2:sc==='EV1'?(p.prestige<other(p).prestige?2:1):0;p.temp={lane,athlete:id,bonus}};
+}
+return {id,lane,fresh,support:used,action:actionLabel(p,id,lane)};
+}
+function other(p){return p===game.you?game.bot:game.you}
+function strength(p,lane){let value=0,impact=0,count=0;for(const id of Object.keys(p.positions)){if(p.positions[id]!==lane)continue;count++;value+=A[id][L[lane].stat];impact+=A[id][5];if(p.gear[id]==='E1')value+=1;if(p.gear[id]==='E2'&&lane==='TECHNIQUE')value+=2;}
+if(p.temp&&p.temp.lane===lane&&p.positions[p.temp.athlete]===lane)value+=p.temp.bonus;
+return {value,impact,count};
+}
+function owner(lane){let a=strength(game.you,lane),b=strength(game.bot,lane);if(a.value>b.value)return 'you';if(b.value>a.value)return 'bot';if(a.impact>b.impact)return 'you';if(b.impact>a.impact)return 'bot';return 'draw'}
+function laneOwners(){return LANES.map(l=>({lane:l.id,owner:owner(l.id)}))}
+function score(){let controlled={you:0,bot:0,draw:0};for(const x of laneOwners()){controlled[x.owner]++;if(x.owner!=='draw')game[x.owner].prestige++}return controlled}
+function winner(){let a=game.you.prestige,b=game.bot.prestige;if(a!==b)return a>b?'Victoire du joueur':'Victoire de l’ordinateur';
+const c=laneOwners(),ua=c.filter(x=>x.owner==='you').length,ub=c.filter(x=>x.owner==='bot').length;
+if(ua!==ub)return ua>ub?'Victoire du joueur (arènes)':'Victoire de l’ordinateur (arènes)';
+let ma=0,mb=0;for(const l of LANES){ma+=strength(game.you,l.id).value;mb+=strength(game.bot,l.id).value}
+return ma===mb?'Match nul':ma>mb?'Victoire du joueur (force totale)':'Victoire de l’ordinateur (force totale)';
+}
+function allMoves(p){
+ return p.ids.flatMap(id=>LANES.filter(l=>legalAction(p,id,l.id)).map(l=>({id,lane:l.id})));
+}
+function botMoveGreedy(p){
+ const q=other(p),plans=[];
+ for(const plan of allMoves(p)){
+ const was=p.positions[plan.id],idx=L[plan.lane].stat;
+ const base=A[plan.id][idx]+(p.gear[plan.id]==='E1'?1:p.gear[plan.id]==='E2'&&plan.lane==='TECHNIQUE'?2:0);
+ const op=strength(q,plan.lane).value,cur=strength(p,plan.lane).value+base;
+ const capture=cur>op?4.3:cur>=op?2.5:Math.min(2,cur/(op+1));
+ const penalty=was?1.35:0;
+ const val=capture+base*.052-penalty+rng()*1.4;
+ plans.push({...plan,score:val});
+ }
+ plans.sort((a,b)=>b.score-a.score);return plans[0]||null;
+}
+function laneValue(p,positions,lane){
+ let value=0,impact=0;
+ for(const id of p.ids){if(positions[id]!==lane)continue;
+ value+=A[id][L[lane].stat]+(p.gear[id]==='E1'?1:p.gear[id]==='E2'&&lane==='TECHNIQUE'?2:0);
+ impact+=A[id][5];
+ }
+ return {value,impact};
+}
+function relativeControl(p,q,positions){
+ let control=0,margin=0,occupied=0;
+ for(const lane of LANES){
+ const x=laneValue(p,positions,lane.id),y=laneValue(q,q.positions,lane.id);
+ if(x.value>y.value||(x.value===y.value&&x.impact>y.impact))control+=1;
+ else if(x.value===y.value&&x.impact===y.impact)control+=.5;
+ margin+=Math.max(-9,Math.min(9,x.value-y.value));
+ occupied+=Number(x.value>0);
+ }
+ return {control,margin,occupied};
+}
+function botMovePlanner(p){
+ const q=other(p),before=relativeControl(p,q,p.positions),rows=[];
+ for(const plan of allMoves(p)){
+ const future={...p.positions,[plan.id]:plan.lane},after=relativeControl(p,q,future);
+ const was=p.positions[plan.id];
+ const movePenalty=was?.12:0;
+ // Do not inspect the player's pending move. Judge board control after this move only.
+ const val=4*(after.control-before.control)+.24*after.control+.035*after.margin+.15*after.occupied-movePenalty+rng()*.08;
+ rows.push({...plan,score:val});
+ }
+ rows.sort((a,b)=>b.score-a.score);return rows[0]||null;
+}
+function botMoveDiscovery(p){
+ const moves=allMoves(p);return moves[Math.floor(rng()*moves.length)]||null;
+}
+function botMoveByPolicy(p,policy){
+ return policy==='discovery'?botMoveDiscovery(p):policy==='planner'?botMovePlanner(p):botMoveGreedy(p);
+}
+function botMove(p){return botMoveByPolicy(p,game.botDifficulty)}
+function botSupport(p,id,lane){const opts=choices(p,id,lane);if(!opts.length||rng()<.3)return null;const ranked=opts.map(o=>({i:o.i,val:o.id==='T4'?2.4:o.id==='T1'?2.2:o.id==='E1'?3.0:o.id==='E2'&&lane==='TECHNIQUE'?3.1:o.id==='T3'?1.4:o.id==='EV1'?2.1:.2}));ranked.sort((a,b)=>b.val+rng()*.5-(a.val+rng()*.5));return ranked[0].i}
+function setForm(){const ids=game.you.ids.filter(id=>LANES.some(l=>legalAction(game.you,id,l.id)));const actor=ids.includes(form.actor)?form.actor:ids[0]||null;
+form.actor=actor;if(actor&&!legalAction(game.you,actor,form.lane))form.lane=LANES.find(l=>legalAction(game.you,actor,l.id))?.id||'FORCE';
+const possible=choices(game.you,form.actor,form.lane);if(!possible.some(o=>String(o.i)===form.sup))form.sup=''}
+function start(){let sd=Math.trunc(Number(el('seed').value));if(!Number.isFinite(sd)||sd<1||sd>2147483647)sd=20261030;el('seed').value=sd;
+rng=seeded(sd);const side=el('side').value;
+game={version:'1.1',seed:sd,botDifficulty:el('botDifficulty')?.value||'greedy',turn:0,phase:'playing',you:player(side),bot:player(side==='A'?'B':'A'),log:[]};draw(game.you,4);draw(game.bot,4);form={actor:null,lane:'FORCE',sup:''};setForm();el('export').disabled=false;render()}
+function turn(){
+if(!game||game.phase!=='playing')return;
+setForm();const id=form.actor,lane=form.lane,i=form.sup===''?null:Number(form.sup);
+const err=validate(game.you,id,lane,i);if(err){const z=el('error');if(z)z.textContent=err;return}
+const p=botMove(game.bot);if(!p){const z=el('error');if(z)z.textContent='Aucun mouvement légal pour l’ordinateur.';return}
+const bi=botSupport(game.bot,p.id,p.lane),playerMove=apply(game.you,id,lane,i),botAct=apply(game.bot,p.id,p.lane,bi);
+const sc=score();game.log.push({turn:game.turn+1,you:playerMove,bot:botAct,controlled:sc,prestige:[game.you.prestige,game.bot.prestige]});
+game.turn++;game.you.temp=null;game.bot.temp=null;
+if(game.turn>=4)game.phase='done';else {draw(game.you,1);draw(game.bot,1)}
+form={actor:null,lane:'FORCE',sup:''};setForm();render();
+}
+function fmtMove(m){return m.action+(m.support?' · '+S[m.support].name:'')}
+function render(){
+if(!game)return;const u=game.you,b=game.bot;
+el('summary').innerHTML='<div class="metric"><span>Vous · '+u.side+'</span><b>'+u.prestige+'</b>points de prestige</div><div class="metric"><span>Ordinateur · '+b.side+'</span><b>'+b.prestige+'</b>points de prestige</div><div class="metric"><span>Tour</span><b>'+(game.phase==='done'?'4 / 4':(game.turn+1)+' / 4')+'</b>énergies : 2 / tour</div>';
+el('roundBadge').textContent=game.phase==='done'?'Match terminé':'Tour '+(game.turn+1)+' / 4';
+el('board').innerHTML=LANES.map(l=>{
+ const a=strength(u,l.id),b=strength(game.bot,l.id),win=owner(l.id);
+ return '<div class="arena"><h3>'+l.title+'</h3><div class="scoreline"><span>Vous '+a.value+'</span><span>Bot '+b.value+'</span></div>'+
+ '<div class="hint">Contrôle : '+(win==='you'?'vous':win==='bot'?'ordinateur':'contestée')+' · Impact '+a.impact+' / '+b.impact+'</div>'+
+ '<p class="tag">VOUS</p>'+u.ids.filter(id=>u.positions[id]===l.id).map(id=>'<div class="athleteline">'+A[id][1]+' · '+A[id][l.stat]+' '+(u.gear[id]?'('+S[u.gear[id]].name+')':'')+'</div>').join('')+
+ '<p class="tag">ORDINATEUR</p>'+bside().ids.filter(id=>bside().positions[id]===l.id).map(id=>'<div class="athleteline bot">'+A[id][1]+' · '+A[id][l.stat]+' '+(bside().gear[id]?'('+S[bside().gear[id]].name+')':'')+'</div>').join('')+
+ '</div>';
+ }).join('');
+ let v='';
+ if(game.phase==='done'){v='<div class="note"><h2>'+winner()+'</h2><p>Prestige : '+u.prestige+' à '+b.prestige+'. Les arènes et la force cumulée servent de départage si besoin.</p></div><button id="again" class="primary">Recommencer avec la même graine</button>'}
+ else{
+ setForm();
+ v='<div class="cols"><div><label for="actor">Athlète à déployer ou repositionner</label><select id="actor">'+u.ids.map(id=>'<option value="'+id+'" '+(form.actor===id?'selected':'')+'>'+A[id][1]+' ('+(deployment(u,id)?'sur '+u.positions[id]:'réserve')+')</option>').join('')+'</select></div>'+
+ '<div><label for="lane">Arène de destination</label><select id="lane">'+LANES.map(l=>'<option value="'+l.id+'" '+(l.id===form.lane?'selected':'')+'>'+l.title+'</option>').join('')+'</select></div></div>'+
+ '<div class="note" style="margin:14px 0">'+(deployment(u,form.actor)?'Repositionnement':'Nouveau déploiement')+
+ ' · '+A[form.actor][1]+' · '+L[form.lane].title+'</div>'+
+ '<label for="support">Soutien facultatif — maximum 1 par tour</label><select id="support"><option value="">Ne pas jouer de soutien</option>'+
+ u.hand.map((id,i)=>'<option value="'+i+'" '+(form.sup===String(i)?'selected':'')+' '+(compat(u,form.actor,form.lane,id)?'':'disabled')+'>'+S[id].name+' · '+S[id].cost+' énergie(s)'+(id==='T2'?' — INCOMPATIBLE':'')+'</option>').join('')+
+ '</select><p class="hint">Main : '+u.hand.length+' soutiens · Paquet restant : '+u.deck.length+' · T2 exclue du paquet compatible. Les positions et équipements restent visibles sur le plateau.</p>'+
+ '<p id="error" role="alert" class="hint"></p><button class="primary" id="apply">Valider mon mouvement et révéler le tour</button>';
+ }
+ el('decision').innerHTML=v;
+ if(el('actor'))el('actor').onchange=()=>{form.actor=el('actor').value;form.sup='';render()};
+ if(el('lane'))el('lane').onchange=()=>{form.lane=el('lane').value;form.sup='';render()};
+ if(el('support'))el('support').onchange=()=>{form.sup=el('support').value};
+ if(el('apply'))el('apply').onclick=turn;
+ if(el('again'))el('again').onclick=start;
+ el('history').innerHTML=game.log.length?game.log.slice().reverse().map(h=>'<p><strong>Tour '+h.turn+'</strong> — Vous : '+fmtMove(h.you)+' ; ordinateur : '+fmtMove(h.bot)+'.<br><span class="hint">Contrôle : '+h.controlled.you+' arène(s) à vous, '+h.controlled.bot+' au bot, '+h.controlled.draw+' contestée(s). Prestige '+h.prestige[0]+' / '+h.prestige[1]+'.</span></p>').join(''):'<p class="muted">La partie n’a pas encore commencé.</p>';
+}
+function bside(){return game.bot}
+el('codex').innerHTML='<h3 style="margin-top:18px">Mini-Codex expérimental — compatibilité des 7 soutiens</h3><div class="cols">'+SUP.map(s=>'<div class="metric"><strong>'+s.id+' · '+s.name+'</strong><p class="hint">'+s.note+'</p><span class="tag">'+(s.id==='T2'?'NON COMPATIBLE':'COMPATIBILITÉ PROPOSÉE')+'</span></div>').join('')+'</div>';
+el('reset').onclick=start;
+el('export').onclick=()=>{if(!game)return;const x={status:'EXPERIMENTAL_NOT_CANON',version:'LAB-v0.8',seed:game.seed,side:game.you.side,result:game.phase==='done'?winner():null,log:game.log,botDifficulty:game.botDifficulty,points:{player:game.you.prestige,computer:game.bot.prestige}};const blob=new Blob([JSON.stringify(x,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='athletic-masters-conquete-v11.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1200)};
+start();
+</script></body></html>
