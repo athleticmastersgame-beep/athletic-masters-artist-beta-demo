@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>ATHLETIC MASTERS — Laboratoire numérique V0.6</title>
+<style>
+:root{font:15px/1.5 system-ui,-apple-system,sans-serif;color:#eee9df;background:#091326}
+*{box-sizing:border-box}body{margin:0}main{max-width:1110px;margin:0 auto;padding:24px 17px 70px}
+header{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap;padding-bottom:18px;border-bottom:1px solid #344258}
+h1{margin:5px 0 8px;font-size:clamp(25px,4.2vw,42px);line-height:1.13}h2{font-size:19px;margin:0 0 13px}
+.eyebrow{color:#d7b970;letter-spacing:1.6px;font-size:11px;font-weight:800;text-transform:uppercase}
+h3{margin:3px 0 7px}.muted,.hint{color:#b6c1d2}.hint{font-size:12px;margin:6px 0}
+a{color:#d9c281} .pill{display:inline-block;border:1px solid #917f59;color:#e7c985;padding:5px 9px;border-radius:22px;font-size:11px;letter-spacing:.6px}
+.panel{background:#111e31;border:1px solid #37465c;border-radius:14px;padding:19px;margin-top:16px}
+.notice{border-color:#aa8e59;background:#242339}.notice strong{color:#e7c985}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.between{display:flex;justify-content:space-between;align-items:center;gap:9px;flex-wrap:wrap}
+button,input,select{font:inherit}button,select,input[type=number]{padding:10px 13px;border:1px solid #65728a;border-radius:9px;background:#192c43;color:#f7f2e9}
+button{cursor:pointer;font-weight:650}button:hover:not(:disabled){border-color:#e1c888;background:#293e59}button:disabled{opacity:.43;cursor:not-allowed}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #8fc2ff;outline-offset:3px}
+.primary{background:#d7ba76;color:#151b28;border-color:#d7ba76}.primary:hover:not(:disabled){background:#f4d898;color:#151b28}
+label{display:block;font-size:12px;color:#c4d0db;margin-bottom:5px}select,input[type=number]{width:100%}
+.metric{padding:12px;background:#1a2b43;border:1px solid #32475f;border-radius:11px}.metric b{font-size:24px;display:block;color:#edd390}
+.team{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.player-card{background:#1a3049;border:1px solid #6f7890;border-radius:11px;padding:12px;font-size:12px;min-width:0}
+.player-card strong{display:block;font-size:13px;color:#f6e2ab}.player-card .stat{color:#cfdae5;margin-top:8px}
+.player-card.unavailable{opacity:.4}.player-card.pressure{border-color:#d59074}
+.support{display:flex;gap:11px;padding:10px;border:1px solid #40556b;border-radius:9px;align-items:flex-start;cursor:pointer}
+.support input{accent-color:#dbc07e;margin-top:4px}.support small{color:#b9c6d6;display:block}
+.log{max-height:370px;overflow:auto}.log article{border-top:1px solid #364962;padding:10px 0}.log strong{color:#e4cb96}
+.hidden{display:none!important}.status{padding:9px 12px;background:#1a3049;border-left:3px solid #d8bd76;border-radius:6px}
+#score{margin:17px 0}.chip{display:inline-flex;gap:6px;align-items:center;border:1px solid #6a7690;padding:5px 9px;border-radius:9px;font-size:12px}
+ul{padding-left:22px}li{margin:5px 0}.divider{border-top:1px solid #3c4d63;margin:17px 0}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.team{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:15px 11px 50px}.panel{padding:15px}.trio{grid-template-columns:1fr 1fr}}
+</style></head><body><main>
+<header><div><span class="eyebrow">ATHLETIC MASTERS / GAME DESIGN LAB</span><h1>Laboratoire numérique <span style="color:#e8c784">V0.6</span></h1><div class="muted">Une même équipe fictive, deux expériences de gameplay.</div></div><span class="pill">DÉMONSTRATION NON CANONIQUE</span></header>
+<section class="panel notice"><strong>Ce site est un outil de test, pas un règlement officiel.</strong> Aucun athlète historique, aucune illustration réelle, aucun compte, paiement ou connexion réseau. Le mode hybride teste uniquement D-01/D-03/D-05 (Défi, Parade, Pression, K.O.) : <strong>les soutiens D-02, les capacités propres aux athlètes et la récompense de pioche sur K.O. ne sont pas implémentés</strong>. Les règles de remplacement sont provisoires.</section>
+<section class="panel"><h2>1. Configurer une partie numérique</h2><div class="trio">
+<div><label for="mode">Gameplay</label><select id="mode"><option value="standard">Championnat simplifié — LAB V0.5</option><option value="hybrid">Championnat hybride — Module D-05 partiel</option></select></div>
+<div><label for="seat">Votre équipe</label><select id="seat"><option value="A">Équipe A · Forge</option><option value="B">Équipe B · Acier</option></select></div>
+<div><label for="seed">Graine de tirage reproductible</label><input id="seed" type="number" value="20261030" min="1" max="2147483647"></div>
+</div><div class="row" style="margin-top:13px"><button class="primary" id="reset">Nouvelle partie</button><button id="export" disabled>Exporter le journal JSON</button><span class="hint">L'application principale n'est pas modifiée ; aucune donnée n'est envoyée.</span></div></section>
+<div class="trio" id="score"></div>
+<section class="panel" id="status"><h2>2. Partie</h2><p class="muted">Cliquez sur « Nouvelle partie ».</p></section>
+<section class="panel" id="teamPanel"><h2>Votre équipe</h2><div id="team" class="team"></div></section>
+<section class="panel"><h2>Journal de match</h2><div id="journal" class="log"><div class="muted">Aucune action enregistrée.</div></div></section>
+<section class="panel"><h2>Règles de ce laboratoire</h2><div id="rules"></div></section>
+<footer class="hint" style="margin-top:22px">Référence interne : D-01/D-03/D-05 pour les playtests ; D-02 proposition non adoptée ; cartes LAB-* fictives. Les résultats de ce jeu local ne démontrent ni l'équilibrage ni le plaisir de jeu.</footer></main>
+<script>
+"use strict";
+const ATH=[
+['LAB-A01','Pilote Forge',9,7,6,8],['LAB-A02','Pilote Tempo',6,8,9,7],['LAB-A03','Pilote Prisme',6,9,7,8],['LAB-A04','Pilote Éclair',8,6,7,9],['LAB-A05','Pilote Équilibre',7,8,8,7],['LAB-A06','Pilote Horizon',8,7,8,7],
+['LAB-B01','Pilote Acier',8,8,7,7],['LAB-B02','Pilote Souffle',7,7,9,7],['LAB-B03','Pilote Sillage',6,9,8,7],['LAB-B04','Pilote Granite',9,6,7,8],['LAB-B05','Pilote Élan',7,8,6,9],['LAB-B06','Pilote Azur',8,7,7,8]];
+const SUP=[
+['LAB-T01','Impulsion','TECHNIQUE',1,'any',2],['LAB-T02','Geste de force','TECHNIQUE',2,'FORCE',3],
+['LAB-T03','Geste de précision','TECHNIQUE',2,'TECHNIQUE',3],['LAB-T04','Gestion du souffle','TECHNIQUE',2,'ENDURANCE',3],
+['LAB-T05','Finition décisive','TECHNIQUE',2,'IMPACT',3],['LAB-T06','Ajustement','TECHNIQUE',1,'any',1],
+['LAB-EQ01','Équipement de force','EQUIPEMENT',2,'FORCE',1],['LAB-EQ02','Équipement technique','EQUIPEMENT',2,'TECHNIQUE',1],
+['LAB-EQ03','Équipement d’endurance','EQUIPEMENT',2,'ENDURANCE',1],['LAB-EQ04','Équipement d’impact','EQUIPEMENT',2,'IMPACT',1],
+['LAB-EV01','Fenêtre favorable','EVENEMENT',1,'any',1],['LAB-EV02','Moment décisif','EVENEMENT',2,'any',2]];
+const DECK=['LAB-T01','LAB-T01','LAB-T02','LAB-T02','LAB-T03','LAB-T04','LAB-T05','LAB-T06','LAB-EQ01','LAB-EQ02','LAB-EQ03','LAB-EQ04','LAB-EV01','LAB-EV02'];
+const ROUNDS=[['FORCE','TECHNIQUE'],['ENDURANCE','IMPACT'],['TECHNIQUE','FORCE']];
+const lookup=Object.fromEntries(ATH.map(a=>[a[0],a]));const support=Object.fromEntries(SUP.map(c=>[c[0],c]));
+const el=id=>document.getElementById(id);
+let game=null, rng=()=>Math.random();
+function randseed(seed){let t=(seed>>>0);return function(){t+=0x6D2B79F5;let x=t;x=Math.imul(x^(x>>>15),x|1);x^=x+Math.imul(x^(x>>>7),x|61);return ((x^(x>>>14))>>>0)/4294967296}}
+function shuffle(arr){arr=arr.slice();for(let i=arr.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
+function side(letter){return {letter,ids:ATH.filter(a=>a[0].startsWith('LAB-'+letter)).map(a=>a[0]),deck:shuffle(DECK),hand:[],used:[],knocked:[],pressure:{},eq:{},pc:0,sum:0,wins:0}}
+function draw(p,n){while(n-- >0 && p.deck.length)p.hand.push(p.deck.pop())}
+function score(a,rd){const s=lookup[a],r=ROUNDS[rd];return 2*s[['FORCE','TECHNIQUE','ENDURANCE','IMPACT'].indexOf(r[0])+2]+s[['FORCE','TECHNIQUE','ENDURANCE','IMPACT'].indexOf(r[1])+2]}
+function av(p){return p.ids.filter(id=>game.mode==='standard'?!p.used.includes(id):!p.knocked.includes(id))}
+function supportBonus(id,rd){const c=support[id];return c[4]==='any'||c[4]===ROUNDS[rd][0]?c[5]:0}
+function legal(p,ath,batch,rd){if(!av(p).includes(ath)||batch.length>2)return false;
+ const counts={};for(const id of p.hand)counts[id]=(counts[id]||0)+1;
+ for(const id of batch){if(!support[id]||!counts[id])return false;counts[id]--}
+ if(batch.reduce((s,id)=>s+support[id][3],0)>3)return false;
+ if(batch.some(id=>support[id][2]==='TECHNIQUE'&&support[id][4]!=='any'&&support[id][4]!==ROUNDS[rd][0]))return false;
+ if(batch.filter(id=>support[id][2]==='EQUIPEMENT').length+(p.eq[ath]?1:0)>1)return false;
+ return true}
+function allBatches(p,ath,rd){let options=[[]];for(let i=0;i<p.hand.length;i++){options.push([p.hand[i]]);for(let j=i+1;j<p.hand.length;j++)options.push([p.hand[i],p.hand[j]])}
+ return options.filter(b=>legal(p,ath,b,rd))}
+function botAthlete(){const a=av(game.bot);if(!a.length)return null;return a.map(id=>({id,value:score(id,game.rd)+rng()*2})).sort((x,y)=>y.value-x.value)[0].id}
+function botBatch(ath){let opts=allBatches(game.bot,ath,game.rd);return opts.map(b=>({b,score:b.reduce((v,id)=>v+supportBonus(id,game.rd),0)-b.reduce((v,id)=>v+support[id][3],0)*.27+rng()*.45})).sort((a,b)=>b.score-a.score)[0].b}
+function popMsg(t){const n=document.createElement('div');n.className='status';n.style.marginTop='10px';n.textContent=t;el('status').prepend(n)}
+function start(){let seed=Math.trunc(Number(el('seed').value));if(!Number.isFinite(seed)||seed<1||seed>2147483647)seed=20261030;el('seed').value=seed;rng=randseed(seed);
+ const me=el('seat').value;game={mode:el('mode').value,seed,me,rd:0,phase:'athlete',you:side(me),bot:side(me==='A'?'B':'A'),youAth:null,botAth:null,history:[]};
+ if(game.mode==='standard'){draw(game.you,5);draw(game.bot,5)}
+ el('export').disabled=false;render()}
+function render(){if(!game)return;
+ const a=game.you,b=game.bot;
+ el('score').innerHTML='<div class="metric"><span>Vous · équipe '+a.letter+'</span><b>'+a.pc+' PC</b></div><div class="metric"><span>Ordinateur · équipe '+b.letter+'</span><b>'+b.pc+' PC</b></div><div class="metric"><span>Match</span><b>'+(game.rd>=3?'Terminé':'Manche '+(game.rd+1)+'/3')+'</b></div>';
+ const p=ROUNDS[Math.min(game.rd,2)],scoreline=p[0]+' ×2 + '+p[1];
+ let view='<h2>'+(game.rd>=3?'Match terminé':'Manche '+(game.rd+1)+' — '+scoreline)+'</h2>';
+ if(game.rd>=3){const x=a.pc,y=b.pc;const win=x>y?'Victoire du joueur':x<y?'Victoire de l’ordinateur':a.sum>b.sum?'Victoire du joueur (départage)':b.sum>a.sum?'Victoire de l’ordinateur (départage)':a.wins>b.wins?'Victoire du joueur (manches)':b.wins>a.wins?'Victoire de l’ordinateur (manches)':'Match nul';
+ view+='<div class="status"><strong>'+win+'</strong>. Performance cumulée : '+a.sum+' / '+b.sum+'. <button id="replay">Rejouer avec la même graine</button></div>';
+ }else if(game.phase==='athlete'){const options=av(a).map(id=>'<option value="'+id+'">'+lookup[id][1]+' · performance '+score(id,game.rd)+'</option>').join('');
+ view+='<label for="choice">Choisissez secrètement votre titulaire</label><select id="choice">'+options+'</select><p class="hint">L’ordinateur choisit aussi un athlète, avant la révélation. '+(game.mode==='standard'?'Un athlète ne peut jouer qu’une fois.':'Un athlète peut revenir tant qu’il n’est pas K.O.')+'</p><button id="reveal" class="primary">Révéler les deux athlètes</button>';
+ }else if(game.phase==='tactic'){
+ view+='<div class="status">Vous : <strong>'+lookup[game.youAth][1]+'</strong> ('+score(game.youAth,game.rd)+') · Adversaire : <strong>'+lookup[game.botAth][1]+'</strong> ('+score(game.botAth,game.rd)+')</div>';
+ if(game.mode==='standard'){const lst=game.you.hand.map((id,i)=>{const c=support[id],bad=c[2]==='TECHNIQUE'&&c[4]!=='any'&&c[4]!==p[0];
+ return '<label class="support"><input type="checkbox" name="sup" value="'+i+'" '+(bad?'disabled':'')+'><span><strong>'+c[1]+'</strong> · '+c[2]+' · '+c[3]+' énergie(s)<small>'+(c[4]==='any'?'Sans condition': 'Spécialité '+c[4])+' · bonus '+supportBonus(id,game.rd)+(bad?' · NON UTILISABLE À CETTE MANCHE':'')+'</small></span></label>'}).join('');
+ view+='<h3 style="margin-top:16px">Choisissez 0 à 2 soutiens, total 3 énergies maximum</h3><div class="grid">'+lst+'</div><p class="hint">Les déclarations illégales sont rejetées intégralement, sans dépense.</p><button id="resolve" class="primary" style="margin-top:14px">Résoudre la manche</button>';
+ }else{
+ const i=lookup[game.youAth],j=lookup[game.botAth],m=(i[5]>j[3]),enemy=(j[5]>i[3]);
+ view+='<h3 style="margin-top:15px">Choix tactiques (3 énergies)</h3><div class="grid"><label class="support"><input type="checkbox" id="challenge"><span><strong>Défi — 1 énergie</strong><small>Réussite si mon Impact ('+i[5]+') &gt; sa Technique ('+j[3]+') + Parade éventuelle.</small></span></label><label class="support"><input type="checkbox" id="parry"><span><strong>Parade — 1 énergie</strong><small>+1 Technique défensive contre un éventuel Défi adverse.</small></span></label></div><p class="hint">Un Défi réussi : +1 PC tactique et +1 Pression sur le titulaire adverse. À 2 Pressions : K.O. puis remplacement automatique. Pas de soutien ni d’active historique dans ce module.</p><button id="resolve" class="primary">Révéler les tactiques et résoudre</button>';
+ }
+ }
+ el('status').innerHTML=view;
+ if(el('reveal'))el('reveal').onclick=reveal;
+ if(el('resolve'))el('resolve').onclick=resolve;
+ if(el('replay'))el('replay').onclick=start;
+ el('team').innerHTML=a.ids.map(id=>{const t=lookup[id],bad=!av(a).includes(id);return '<div class="player-card '+(bad?'unavailable':'')+' '+(a.pressure[id]?'pressure':'')+'"><strong>'+t[1]+'</strong><div class="hint">'+id+'</div><div class="stat">FOR '+t[2]+' · TEC '+t[3]+'<br>END '+t[4]+' · IMP '+t[5]+'</div><div class="hint">'+(a.knocked.includes(id)?'K.O.':a.used.includes(id)?'Déjà joué':(a.pressure[id]||0)+' Pression')+'</div></div>'}).join('');
+ el('journal').innerHTML=game.history.length?game.history.map(h=>'<article><strong>Manche '+h.round+'</strong> · '+h.title+'<div class="hint">'+h.detail+'</div></article>').reverse().join(''):'<div class="muted">Aucune manche résolue.</div>';
+ el('rules').innerHTML=game.mode==='standard'?
+ '<ul><li>3 épreuves fixes : FOR×2 + TEC ; END×2 + IMP ; TEC×2 + FOR.</li><li>6 athlètes ; chaque titulaire ne peut participer qu’une fois.</li><li>14 soutiens distincts du paquet des athlètes ; 5 au départ, puis +2 avant les manches 2 et 3.</li><li>3 énergies par manche ; jusqu’à 2 soutiens, coût cumulé maximal 3 ; bonus conditionnels.</li><li>Performance la plus haute : 3 PC ; égalité 1 PC chacun.</li><li>Départage : somme des performances finales puis manches gagnées. Équipements persistants mais sans seconde utilisation dans ce témoin.</li></ul>':
+ '<ul><li>3 épreuves fixes et 3 énergies par manche, non reportables.</li><li>Chaque titulaire non K.O. peut revenir, avec sa Pression conservée.</li><li>Défi : 1 énergie ; succès si IMP du défieur &gt; TEC adverse + Parade éventuelle.</li><li>Parade : 1 énergie, +1 TEC défensive.</li><li>Défi réussi : +1 PC tactique et +1 Pression. Deux Pressions : K.O. et remplacement avant performance.</li><li>Gagnant sportif : 3 PC ; égalité : 1 chacun ; départage par performances <strong>brutes</strong>.</li><li><strong>Module partiel :</strong> pas de soutiens D-02, d’actives/passives ni de pioche sur K.O. ; remplacement automatique fictif pour ce test.</li></ul>';
+}
+function reveal(){if(!game||game.phase!=='athlete')return;const x=el('choice').value;if(!av(game.you).includes(x))return;game.youAth=x;game.botAth=botAthlete();game.phase='tactic';render()}
+function consume(p,batch,ath,rd){if(!legal(p,ath,batch,rd))return {ok:false,bonus:0};let bonus=0;
+ for(const id of batch){p.hand.splice(p.hand.indexOf(id),1);bonus+=supportBonus(id,rd);if(support[id][2]==='EQUIPEMENT')p.eq[ath]=id}
+ return {ok:true,bonus}}
+function nextReplacement(p){return p.ids.find(id=>!p.knocked.includes(id))||null}
+function resolve(){if(!game||game.phase!=='tactic')return;
+ const g=game,p=g.you,q=g.bot,r=g.rd,a=g.youAth,b=g.botAth;
+ let bonusP=0,bonusQ=0,tactP=0,tactQ=0,extra='';
+ if(g.mode==='standard'){
+ const indexes=[...document.querySelectorAll('input[name="sup"]:checked')].map(n=>Number(n.value));
+ const batch=indexes.map(i=>p.hand[i]),bt=botBatch(b);
+ const x=consume(p,batch,a,r),y=consume(q,bt,b,r);bonusP=x.bonus;bonusQ=y.bonus;
+ extra='Vous : '+(x.ok?(batch.map(id=>support[id][1]).join(', ')||'aucun soutien'):'lot rejeté')+' ; bot : '+(bt.map(id=>support[id][1]).join(', ')||'aucun soutien')+'. ';
+ p.used.push(a);q.used.push(b);
+ }else{
+ const challenge=el('challenge').checked,parry=el('parry').checked;
+ const botChallenge=rng()<(lookup[b][5]>lookup[a][3] ? .82:.1);
+ const botParry=rng()<(lookup[a][5]>lookup[b][3] ? .6:.2);
+ const hitP=challenge&&(lookup[a][5]>lookup[b][3]+Number(botParry));
+ const hitQ=botChallenge&&(lookup[b][5]>lookup[a][3]+Number(parry));
+ tactP=Number(hitP);tactQ=Number(hitQ);
+ if(hitP){q.pressure[b]=(q.pressure[b]||0)+1;if(q.pressure[b]>=2){q.knocked.push(b);b=nextReplacement(q)}}
+ if(hitQ){p.pressure[a]=(p.pressure[a]||0)+1;if(p.pressure[a]>=2){p.knocked.push(a);a=nextReplacement(p)}}
+ extra='Défi joueur : '+(challenge?(hitP?'réussi':'échoué'):'non tenté')+' · défi bot : '+(botChallenge?(hitQ?'réussi':'échoué'):'non tenté')+' ; Parades joueur/bot : '+(parry?'oui':'non')+'/'+(botParry?'oui':'non')+'.'+(a!==g.youAth||b!==g.botAth?' Remplacement après K.O.':'');
+ }
+ const x=a?score(a,r)+bonusP:0,y=b?score(b,r)+bonusQ:0;
+ p.sum+=g.mode==='standard'?x:score(a||g.youAth,r);q.sum+=g.mode==='standard'?y:score(b||g.botAth,r);
+ if(x>y){p.pc+=3;p.wins++}else if(y>x){q.pc+=3;q.wins++}else{p.pc++;q.pc++}
+ p.pc+=tactP;q.pc+=tactQ;
+ g.history.push({round:r+1,title:x+' – '+y+' · PC cumulés '+p.pc+' – '+q.pc,
+ detail:'Titulaire : '+lookup[g.youAth][1]+' vs '+lookup[g.botAth][1]+'. '+extra});
+ g.rd++;g.phase='athlete';if(g.rd<3&&g.mode==='standard'){draw(p,2);draw(q,2)}
+ render()}
+el('reset').onclick=start;
+el('export').onclick=()=>{if(!game)return;const payload={status:'LAB_NON_CANONIQUE',version:'0.6',mode:game.mode,seed:game.seed,side:game.me,history:game.history,pc:[game.you.pc,game.bot.pc]};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='athletic-masters-journal-lab-v06.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)};
+start();
+</script></body></html>
