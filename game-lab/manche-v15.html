@@ -1,0 +1,232 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta http-equiv="Content-Security-Policy" content="default-src 'none';style-src 'unsafe-inline';script-src 'unsafe-inline';img-src data:;connect-src 'none';object-src 'none';base-uri 'none';form-action 'none'"><title>ATHLETIC MASTERS — Manche complète V1.5</title>
+<style>
+:root{font:15px/1.48 system-ui,-apple-system,sans-serif;background:#091424;color:#f0e9dd}*{box-sizing:border-box}body{margin:0}main{max-width:1150px;margin:auto;padding:25px 18px 75px}h1{font-size:clamp(28px,4.5vw,43px);line-height:1.13;margin:5px 0 12px}h2{font-size:21px;margin:0 0 12px}h3{font-size:16px;margin:0 0 8px}.eyebrow{font-size:11px;letter-spacing:1.6px;color:#dec082;font-weight:800}.muted,.hint{color:#bbcad9}.hint{font-size:12px}.panel{border:1px solid #475d72;background:#142238;border-radius:14px;margin-top:15px;padding:19px}.notice{border-color:#9c835b;background:#282a3b}.notice strong{color:#f3d496}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}label{display:block;font-size:12px;color:#d1deeb;margin-bottom:6px}select,input,button{font:inherit;border-radius:9px;padding:10px 12px}select,input{width:100%;background:#20364c;border:1px solid #687f94;color:#fff4e4}button{background:#e8cc90;border:1px solid #e8cc90;color:#192536;cursor:pointer;font-weight:800}button.secondary{background:#243e55;border-color:#58748b;color:#f7e9d1}button:focus-visible,select:focus-visible{outline:3px solid #8fc7f9;outline-offset:2px}.hand{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}.metric{background:#1c344e;border:1px solid #4b637d;border-radius:10px;padding:12px}.metric b{display:block;font-size:25px;color:#f0d29b}.metric span{font-size:12px;color:#c9d7e3}.notice2{background:#21394f;border-left:3px solid #e0c185;border-radius:7px;padding:12px;margin:13px 0}.warning{color:#ffd3b5}.success{color:#b6e8cf}.tablewrap{overflow-x:auto}table{min-width:870px;width:100%;border-collapse:collapse;font-size:12px}th{background:#253b51;color:#f2d498;text-align:left;white-space:nowrap}td,th{border-bottom:1px solid #43556b;padding:9px 8px;vertical-align:top}tr:first-child.best{background:#25423f}td.num{text-align:right;font-variant-numeric:tabular-nums}td small{display:block;color:#b8c8d8;max-width:340px}.tag{display:inline-block;border:1px solid #8e784d;border-radius:100px;padding:4px 8px;color:#f2d599;font-size:11px}.links{display:flex;gap:9px;flex-wrap:wrap}.links a{padding:8px 12px;border:1px solid #9d855a;border-radius:8px;text-decoration:none;color:#edd097}ul li{margin:6px 0}footer{color:#aabacc;font-size:11px;margin-top:22px}
+@media(max-width:850px){.hand{grid-template-columns:repeat(3,1fr)}}@media(max-width:650px){.grid,.trio{grid-template-columns:1fr}.hand{grid-template-columns:repeat(2,1fr)}.panel{padding:14px}}
+</style></head><body><main>
+<span class="eyebrow">ATHLETIC MASTERS · GAME DESIGN LAB</span><h1>Manche complète <span style="color:#edcb89">V1.5</span></h1><p class="muted">Énumérer toutes les combinaisons légales d'une main fictive avec 3 énergies, les Défis, les Parades et les soutiens sur plusieurs fenêtres.</p>
+<section class="panel notice"><strong>NON CANONIQUE.</strong> D-01/D-03/D-05 restent les règles de référence validées pour les anciens playtests. D-02, ses sept soutiens fictifs et ses trois fenêtres sont des hypothèses de laboratoire. Cette page est un <strong>analyseur de plans</strong>, pas une simulation de décisions secrètes en direct. Les actes de l'adversaire sont figés par les paramètres ; aucune capacité historique n'est inventée.</section>
+<section class="panel"><h2>1. Configuration de la manche</h2><div class="grid">
+<div><label for="round">Épreuve</label><select id="round"><option value="0">Manche 1 — FORCE ×2 + TECHNIQUE</option><option value="1">Manche 2 — ENDURANCE ×2 + IMPACT</option><option value="2">Manche 3 — TECHNIQUE ×2 + ENDURANCE</option></select></div>
+<div><label for="side">Votre équipe</label><select id="side"><option value="A">Équipe A</option><option value="B">Équipe B</option></select></div>
+<div><label for="mine">Titulaire initial</label><select id="mine"></select></div><div><label for="opp">Titulaire adverse initial</label><select id="opp"></select></div>
+<div><label for="oppChallenge">L'adversaire déclare-t-il un Défi ?</label><select id="oppChallenge"><option value="no">Non</option><option value="yes">Oui — fixé pour ce scénario</option></select></div>
+<div><label for="oppDefense">Si vous défiez, l'adversaire répond par</label><select id="oppDefense"><option value="0">Aucune Parade</option><option value="1">Parade payée (+1 TECHNIQUE)</option><option value="2">Parade + T2 (+2 TECHNIQUE)</option></select></div>
+<div><label for="myPressure">Pression initiale sur votre titulaire</label><select id="myPressure"><option value="0">0</option><option value="1">1 — risque de K.O.</option></select></div>
+<div><label for="oppPressure">Pression initiale sur l'adversaire</label><select id="oppPressure"><option value="0">0</option><option value="1">1 — risque de K.O.</option></select></div>
+<div><label for="myReplacement">Remplaçant si votre titulaire est K.O.</label><select id="myReplacement"></select></div>
+<div><label for="oppReplacement">Remplaçant si le titulaire adverse est K.O.</label><select id="oppReplacement"></select></div>
+<div><label for="gearOwn">Équipement déjà attaché à votre titulaire</label><select id="gearOwn"><option value="">Aucun</option><option value="E1">E1 · Matériel polyvalent</option><option value="E2">E2 · Matériel technique</option></select></div>
+<div><label for="gearOpp">Équipement déjà attaché au titulaire adverse</label><select id="gearOpp"><option value="">Aucun</option><option value="E1">E1 · Matériel polyvalent</option><option value="E2">E2 · Matériel technique</option></select></div>
+<div><label for="equipTarget">Cible des équipements de votre main</label><select id="equipTarget"><option value="mine">Titulaire initial</option><option value="reserve">Un athlète de réserve (sans équipement existant)</option></select></div>
+<div><label for="reserve">Athlète de réserve à équiper</label><select id="reserve"></select></div>
+<div><label for="behind">Étiez-vous derrière au début de la manche ?</label><select id="behind"><option value="no">Non : EV1 donne +1</option><option value="yes">Oui : EV1 donne +2</option></select></div>
+<div><label for="activeCost">Énergie à réserver pour une active éventuelle</label><select id="activeCost"><option value="0">0 — aucune réserve</option><option value="1">1 énergie réservée</option><option value="2">2 énergies réservées</option><option value="3">3 énergies réservées</option></select></div>
+</div>
+<h3 style="margin-top:20px">Votre main de soutiens (cinq emplacements)</h3><p class="hint">Les doublons sont autorisés dans la limite de deux par identité. Choisir « vide » pour tester une main plus petite. Seules les cartes présentes dans cette main peuvent être dépensées.</p>
+<div class="hand" id="hand"></div><div class="row" style="margin-top:14px"><button id="run">Comparer les plans légaux</button><button class="secondary" id="export">Exporter les résultats JSON</button></div><p id="error" class="warning" role="alert"></p></section>
+<section class="panel"><h2>2. Combinaisons et résultats</h2><div class="trio" id="metrics"></div><div class="notice2" id="explain"></div><div class="tablewrap"><table><thead><tr><th>#</th><th>Décisions par fenêtre</th><th>Énergies</th><th>Soutiens</th><th>Score final</th><th>PC pour / contre</th><th>Écart PC</th><th>Équipement futur*</th></tr></thead><tbody id="plans"></tbody></table></div><p class="hint">Seuls les 24 premiers plans, classés par écart de PC puis bonus d'équipement futur, sont affichés. L'export JSON contient tous les plans. Les scénarios entraînant un K.O. sans remplaçant renseigné sont classés « score indéterminé » et ne sont pas déclarés optimaux.</p></section>
+<section class="panel"><h2>3. Interprétation et limites</h2><ul>
+<li><strong>Énergie :</strong> exactement 3 par manche. Défi et Parade : coût 1 ; T1/T3/T4/E1/E2/EV1 : coût 1 ; T2 : coût 0, seulement avec une Parade payée, maximum une carte gratuite par manche.</li>
+<li><strong>Plafond :</strong> maximum 2 soutiens sur l'ensemble de la manche. Dans cette version du moteur, maximum un équipement posé dans la fenêtre Préparation, comme l'interface Championnat V1.2.</li>
+<li><strong>Fenêtres :</strong> Préparation (T4/équipements), Défi, Réaction (Parade/T2), Résolution/K.O./remplacement, Finale (T1/T3/EV1), puis calcul sportif. Les variantes calculées par cet analyseur ne sont <strong>pas</strong> des prédictions des actions que vous pourriez choisir avec information incomplète.</li>
+<li><strong>Réserve active :</strong> elle bloque une fraction des 3 énergies ; aucun bonus de score ni aucun PC n'est attribué à l'active, car aucun texte historique approuvé n'a été fourni au moteur.</li>
+<li><strong>Équipement futur* :</strong> somme <em>conditionnelle</em> des bonus sportifs potentiels du nouvel équipement sur les manches restantes, en supposant que le porteur soit sélectionné et ne subisse pas de K.O. ; ce ne sont ni des PC garantis ni une espérance de victoire.</li>
+<li><strong>Adversaire :</strong> ses Défis, Parades, cartes et remplaçants sont supposés disponibles et connus, sans déduction de main cachée. Le jeu réel reste à information imparfaite.</li>
+<li>Si le Défi adverse réussit, il rapporte aussi un PC tactique adverse et peut provoquer un K.O. ; les PC sont calculés après remplacement si un athlète a été désigné.</li></ul>
+<div class="links"><a href="./opportunite-v14.html">Comparateur V1.4</a><a href="./hybride-v12.html">Championnat numérique</a><a href="./codex-v10.html">Codex</a><a href="./">Portail</a></div></section>
+<footer>ATHLETIC MASTERS · laboratoire V1.5. Aucun playtest papier, aucune donnée historique ou carte officielle modifiée.</footer>
+<script>
+"use strict";
+const ATH=[['LAB-A01','Forge',9,7,6,8],['LAB-A02','Tempo',6,8,9,7],['LAB-A03','Prisme',6,9,7,8],['LAB-A04','Éclair',8,6,7,9],['LAB-A05','Équilibre',7,8,8,7],['LAB-A06','Horizon',8,7,8,7],
+['LAB-B01','Acier',8,8,7,7],['LAB-B02','Souffle',7,7,9,7],['LAB-B03','Sillage',6,9,8,7],['LAB-B04','Granite',9,6,7,8],['LAB-B05','Élan',7,8,6,9],['LAB-B06','Azur',8,7,7,8]];
+const SUPPORT=[
+{id:'T1',name:'Ajustement technique',cost:1,window:'final'}, {id:'T2',name:'Parade préparée',cost:0,window:'reaction'},
+{id:'T3',name:'Impulsion contrôlée',cost:1,window:'final'},{id:'T4',name:'Élan initial',cost:1,window:'prep'},
+{id:'E1',name:'Matériel polyvalent',cost:1,window:'prep'},{id:'E2',name:'Matériel technique',cost:1,window:'prep'},
+{id:'EV1',name:'Second souffle',cost:1,window:'final'}];
+const SM=Object.fromEntries(SUPPORT.map(s=>[s.id,s])),A=Object.fromEntries(ATH.map(a=>[a[0],a]));
+const ROUNDS=[['FORCE','TECHNIQUE'],['ENDURANCE','IMPACT'],['TECHNIQUE','ENDURANCE']],STAT={FORCE:2,TECHNIQUE:3,ENDURANCE:4,IMPACT:5};
+const el=id=>document.getElementById(id);let latest=null;
+function grp(k){return ATH.filter(x=>x[0].startsWith('LAB-'+k))}
+function base(id,rd){const v=A[id],r=ROUNDS[rd];return 2*v[STAT[r[0]]]+v[STAT[r[1]]]}
+function gearBonus(type,rd){return type==='E1'?1:type==='E2'&&ROUNDS[rd][0]==='TECHNIQUE'?2:0}
+function sportPC(own,rival){return own>rival?[3,0]:own<rival?[0,3]:[1,1]}
+function clone(p){return {...p,handUsed:p.handUsed.slice(),equip:{...p.equip},actions:p.actions.slice()}}
+function initial(){
+ const side=el('side').value,mine=el('mine').value,opp=el('opp').value;
+ if(!A[mine]||!A[opp]||!mine.startsWith('LAB-'+side)||!opp.startsWith('LAB-'+(side==='A'?'B':'A')))throw Error('Choisissez deux athlètes de camps opposés.');
+ const hand=[...Array(5)].map((_,i)=>el('hand'+i).value).filter(Boolean);
+ const counts={};for(const id of hand){counts[id]=(counts[id]||0)+1;if(counts[id]>2)throw Error('Deux exemplaires maximum par identité de soutien.')}
+ const rd=Number(el('round').value),equipTarget=el('equipTarget').value==='reserve'?el('reserve').value:mine;
+ const reserve=el('reserve').value,myReplacement=el('myReplacement').value,oppReplacement=el('oppReplacement').value;
+ if(equipTarget===mine&&el('gearOwn').value&&hand.some(x=>x==='E1'||x==='E2')){ /* Equipment becomes unavailable to attach; other plans remain legal. */ }
+ return {rd,mine,opp,hand,equipTarget,reserve,myReplacement,oppReplacement,
+  ownPressure:Number(el('myPressure').value),oppPressure:Number(el('oppPressure').value),
+  enemyChallenge:el('oppChallenge').value==='yes',enemyDefense:Number(el('oppDefense').value),
+  myGear:el('gearOwn').value,enemyGear:el('gearOpp').value,
+  behind:el('behind').value==='yes',reserveActive:Number(el('activeCost').value)};
+}
+function newPlan(ctx){
+ const equip={};if(ctx.myGear)equip[ctx.mine]=ctx.myGear;
+ return {energy:3,used:0,zero:0,handUsed:[],equip,prep:0,final:0,extraDefense:0,
+  challenge:false,parry:false,actions:[],future:0};
+}
+function canUse(p,id,phase,ctx){
+ if(p.used>=2)return false;
+ const c=SM[id];if(!c||c.window!==phase||c.cost>p.energy)return false;
+ if(c.cost===0&&p.zero>=1)return false;
+ if(id==='T1'&&ROUNDS[ctx.rd][1]!=='TECHNIQUE')return false;
+ if(id==='T2'&&!p.parry)return false;
+ if(id==='E1'||id==='E2'){
+  if(p.equip[ctx.equipTarget])return false;
+  if(![ctx.mine,ctx.reserve].includes(ctx.equipTarget))return false;
+  if(ctx.equipTarget===ctx.mine&&ctx.myGear)return false;
+  if(p.actions.some(x=>x.startsWith('E1')||x.startsWith('E2')))return false; // UX V1.2: one equipment per prep window.
+ }
+ return true;
+}
+function applyCard(p,id,idx,ctx){
+ const c=SM[id],n=clone(p);n.energy-=c.cost;n.used++;if(c.cost===0)n.zero++;
+ n.handUsed.push(idx);
+ if(id==='T4')n.prep+=2;
+ else if(id==='T2')n.extraDefense+=1;
+ else if(id==='T1')n.final+=2;
+ else if(id==='T3')n.final+=1;
+ else if(id==='EV1')n.final+=ctx.behind?2:1;
+ else if(id==='E1'||id==='E2')n.equip[ctx.equipTarget]=id;
+ n.actions.push(id+(id==='E1'||id==='E2'?'→'+A[ctx.equipTarget][1]:''));
+ return n;
+}
+function supports(p,ctx,phase){
+ const out=[p];
+ function dfs(cur,from){
+  if(cur.used>=2)return;
+  for(let i=from;i<ctx.hand.length;i++){
+    if(cur.handUsed.includes(i))continue;
+    const id=ctx.hand[i];if(!canUse(cur,id,phase,ctx))continue;
+    const nx=applyCard(cur,id,i,ctx);out.push(nx);dfs(nx,i+1);
+  }
+ }
+ dfs(p,0);return out;
+}
+function resolve(p,ctx){
+ const hitMe=p.challenge&&A[ctx.mine][5]>A[ctx.opp][3]+ctx.enemyDefense;
+ const hitEnemy=ctx.enemyChallenge&&A[ctx.opp][5]>A[ctx.mine][3]+Number(p.parry)+p.extraDefense;
+ const koEnemy=hitMe&&ctx.oppPressure>=1,koMe=hitEnemy&&ctx.ownPressure>=1;
+ const finalMine=koMe?ctx.myReplacement:ctx.mine,finalOpp=koEnemy?ctx.oppReplacement:ctx.opp;
+ const unresolved=(!finalMine||!finalOpp||!A[finalMine]||!A[finalOpp]);
+ const mineEquip=koMe&&finalMine===ctx.mine?'':p.equip[finalMine]||'';
+ // Gear of knocked-out starter never applies; replacement may use a gear prepared on the bench.
+ const finalMineGear=koMe?(finalMine===ctx.mine?'':(p.equip[finalMine]||'')):(p.equip[ctx.mine]||'');
+ const finalEnemyGear=koEnemy?'':ctx.enemyGear;
+ const myScore=unresolved?null:base(finalMine,ctx.rd)+(koMe?0:p.prep)+p.final+gearBonus(finalMineGear,ctx.rd);
+ const enemyScore=unresolved?null:base(finalOpp,ctx.rd)+gearBonus(finalEnemyGear,ctx.rd);
+ const sport=unresolved?null:sportPC(myScore,enemyScore);
+ const pcOwn=sport?sport[0]+Number(hitMe):null,pcEnemy=sport?sport[1]+Number(hitEnemy):null;
+ const future=Object.keys(p.equip).filter(id=>p.equip[id]&&(!ctx.myGear||id!==ctx.mine)).reduce((sum,id)=>{
+    if(koMe&&id===ctx.mine)return sum;
+    for(let rd=ctx.rd+1;rd<3;rd++)sum+=gearBonus(p.equip[id],rd);
+    return sum;
+ },0);
+ const spent=3-p.energy;
+ return {energy:p.energy,spent,used:p.used,zero:p.zero,handUsed:p.handUsed,
+  actions:p.actions,prep:p.prep,final:p.final,challenge:p.challenge,parry:p.parry,
+  hitMe,hitEnemy,koEnemy,koMe,unresolved,myScore,enemyScore,pcOwn,pcEnemy,
+  net:unresolved?null:pcOwn-pcEnemy,future,futureConditional:true,
+  activeReserve:ctx.reserveActive,remainingAfterReserve:p.energy-ctx.reserveActive};
+}
+function enumerate(ctx){
+ const all=[];
+ for(const pre of supports(newPlan(ctx),ctx,'prep')){
+ for(const challenge of [false,true]){
+  if(challenge&&pre.energy<1)continue;
+  const chal=clone(pre);chal.challenge=challenge;
+  if(challenge){chal.energy--;chal.actions.push('DÉFI')}
+  for(const parry of [false,true]){
+   if(parry&&(!ctx.enemyChallenge||chal.energy<1))continue;
+   const react=clone(chal);react.parry=parry;if(parry){react.energy--;react.actions.push('PARADE')}
+   for(const reaction of supports(react,ctx,'reaction')){
+    for(const fin of supports(reaction,ctx,'final')){
+     if(fin.energy<ctx.reserveActive)continue;
+     const result=resolve(fin,ctx);
+     result.stages={
+       prep:pre.actions.join(' + ')||'—',
+       challenge:challenge?'Défi':'Passer',
+       reaction:reaction.actions.slice(chal.actions.length).join(' + ')||'—',
+       final:fin.actions.slice(reaction.actions.length).join(' + ')||'—'
+     };
+     all.push(result);
+    }
+   }
+  }
+ }
+ }
+ // Distinguish physical copies only in the exported card indexes, but suppress identical public plans.
+ const seen=new Set(),unique=[];
+ for(const p of all){
+   const key=JSON.stringify([p.actions,p.challenge,p.parry,p.myScore,p.enemyScore,p.spent,p.future]);
+   if(seen.has(key))continue;seen.add(key);unique.push(p);
+ }
+ unique.sort((a,b)=>{
+  if(a.unresolved!==b.unresolved)return Number(a.unresolved)-Number(b.unresolved);
+  if(!a.unresolved&&a.net!==b.net)return b.net-a.net;
+  return b.future-a.future||a.spent-b.spent||a.used-b.used||a.actions.join().localeCompare(b.actions.join());
+ });
+ return {all:unique,rawCount:all.length,undetermined:unique.filter(p=>p.unresolved).length};
+}
+function formatStages(p){
+ return ['Préparation : '+p.stages.prep,'Défi : '+p.stages.challenge,'Réaction : '+p.stages.reaction,'Finale : '+p.stages.final].join(' ; ');
+}
+function view(){
+ try{
+ const ctx=initial(),result=enumerate(ctx);latest={version:'LAB-1.5',status:'EXPERIMENTAL_NOT_CANON',context:ctx,results:result};
+ const all=result.all,determinate=all.filter(p=>!p.unresolved);
+ const best=determinate.length?determinate[0].net:null;
+ const maxFuture=all.length?Math.max(...all.map(p=>p.future)):0;
+ el('metrics').innerHTML=
+ '<div class="metric"><span>Combinaisons légales distinctes</span><b>'+all.length+'</b></div>'+
+ '<div class="metric"><span>Meilleur écart de PC déterminé</span><b>'+(best===null?'—':(best>0?'+':'')+best)+'</b></div>'+
+ '<div class="metric"><span>Plans avec score indéterminé</span><b>'+result.undetermined+'</b></div>';
+ el('plans').innerHTML=all.slice(0,24).map((p,i)=>'<tr class="'+(i===0&&!p.unresolved?'best':'')+'"><td>'+(i+1)+'</td><td>'+formatStages(p)+
+ (p.koMe||p.koEnemy?'<small>K.O. '+(p.koMe?'chez vous ':'')+(p.koEnemy?'chez l’adversaire':'')+'</small>':'')+'</td><td class="num">'+p.spent+' / 3<small>restant '+p.energy+' ; après réserve '+p.remainingAfterReserve+'</small></td>'+
+ '<td class="num">'+p.used+' / 2</td>'+
+ '<td class="num">'+(p.unresolved?'—':p.myScore+' / '+p.enemyScore)+'</td>'+
+ '<td class="num">'+(p.unresolved?'—':p.pcOwn+' / '+p.pcEnemy)+'</td>'+
+ '<td class="num">'+(p.unresolved?'indéterminé':(p.net>0?'+':'')+p.net)+'</td>'+
+ '<td class="num">'+(p.future?'+'+p.future+' conditionnels':'0')+'</td></tr>').join('');
+ el('explain').innerHTML='<strong>Lecture :</strong> les écarts de PC sont calculés après les effets connus de cette manche. '+
+ 'Un plan à +'+maxFuture+' de bonus sportif futur potentiel ne garantit aucun point futur : il suppose que l’athlète équipé soit engagé lors des manches restantes et conserve son équipement. '+
+ 'La réserve pour l’active n’accorde aucun effet. '+(result.undetermined?'Certains scénarios exigent un remplaçant pour déterminer les PC.':'Tous les scores des scénarios affichés sont déterminés.');
+ el('error').textContent='';
+ }catch(e){el('error').textContent=String(e.message||e);latest=null;el('metrics').innerHTML='';el('plans').innerHTML='';}
+}
+function fill(){
+ const side=el('side').value,other=side==='A'?'B':'A';
+ const options=(team,exclude)=>'<option value="">— Choisir —</option>'+grp(team).filter(x=>x[0]!==exclude).map(x=>'<option value="'+x[0]+'">'+x[1]+' ('+x[0]+')</option>').join('');
+ el('mine').innerHTML=grp(side).map(x=>'<option value="'+x[0]+'">'+x[1]+'</option>').join('');
+ el('opp').innerHTML=grp(other).map(x=>'<option value="'+x[0]+'">'+x[1]+'</option>').join('');
+ el('reserve').innerHTML=options(side,'');
+ refresh();
+}
+function refresh(){
+ const side=el('side').value,other=side==='A'?'B':'A',mine=el('mine').value,opp=el('opp').value;
+ function renderList(target,team,exclude){
+ const old=el(target).value;
+ const opts='<option value="">Non renseigné</option>'+grp(team).filter(x=>x[0]!==exclude).map(x=>'<option value="'+x[0]+'">'+x[1]+'</option>').join('');
+ el(target).innerHTML=opts;
+ if(old&&A[old]&&old!==exclude&&old.startsWith('LAB-'+team))el(target).value=old;else el(target).value='';
+ }
+ renderList('reserve',side,mine);renderList('myReplacement',side,mine);renderList('oppReplacement',other,opp);
+}
+const presets=['T4','E1','T2','T3','EV1'];
+el('hand').innerHTML=presets.map((x,i)=>'<div><label for="hand'+i+'">Carte en main '+(i+1)+'</label><select id="hand'+i+'"><option value="">Emplacement vide</option>'+
+ SUPPORT.map(s=>'<option value="'+s.id+'" '+(x===s.id?'selected':'')+'>'+s.id+' · '+s.name+'</option>').join('')+'</select></div>').join('');
+el('side').onchange=fill;el('mine').onchange=refresh;el('opp').onchange=refresh;
+el('run').onclick=view;
+el('export').onclick=()=>{
+ if(!latest){el('error').textContent='Calculer les plans avant export.';return}
+ const blob=new Blob([JSON.stringify(latest,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),anchor=document.createElement('a');
+ anchor.href=url;anchor.download='athletic-masters-manche-v15.json';anchor.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
+fill();view();
+</script></main></body></html>
