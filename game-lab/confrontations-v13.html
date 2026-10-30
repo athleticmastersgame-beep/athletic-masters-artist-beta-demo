@@ -1,0 +1,89 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; img-src data:; object-src 'none'; form-action 'none'"><title>ATHLETIC MASTERS — Confrontations V1.3</title>
+<style>
+:root{font:15px/1.5 system-ui,-apple-system,sans-serif;background:#091326;color:#f1ede2}*{box-sizing:border-box}body{margin:0}main{max-width:1140px;margin:auto;padding:24px 18px 75px}h1{font-size:clamp(27px,4.5vw,44px);margin:7px 0 11px;line-height:1.15}h2{font-size:21px;margin:0 0 12px}h3{font-size:16px;margin:0 0 9px}
+.eyebrow{color:#e7c789;font-size:11px;font-weight:800;letter-spacing:1.4px}.muted,.hint{color:#becad7}.hint{font-size:12px}.panel{background:#13223a;border:1px solid #3b526b;padding:18px;border-radius:14px;margin:15px 0}.warning{background:#28273b;border-color:#a99162}.warning strong{color:#ead091}.row{display:flex;flex-wrap:wrap;align-items:center;gap:9px}.between{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.metric{padding:13px;background:#1c334e;border:1px solid #4c617c;border-radius:10px}.metric b{display:block;font-size:27px;color:#e8cd8f}.metric span{font-size:12px;color:#d4dce5}
+label{font-size:12px;color:#c9dae9;display:block;margin-bottom:6px}select,input{font:inherit;border:1px solid #697f96;background:#1d364e;color:#faf2e4;border-radius:8px;padding:10px;width:100%}input[type=checkbox]{width:auto;accent-color:#e5c17d}button{font:inherit;border:1px solid #6e8298;background:#263c56;color:#f0e5d4;padding:11px 14px;border-radius:9px;font-weight:650;cursor:pointer}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #94c8fa;outline-offset:2px}.primary{background:#ebce8e;border-color:#ebce8e;color:#142136}.pill{display:inline-block;border-radius:19px;border:1px solid #a48b5a;padding:4px 8px;color:#efd697;font-size:11px}
+.result{padding:17px;background:#1c364e;border-left:4px solid #dab875;border-radius:8px}.result strong{font-size:20px;color:#f6dea5}.result small{display:block;margin-top:8px;color:#c3d1df}
+.tablewrap{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:540px}th,td{border-bottom:1px solid #3b4e65;text-align:center;padding:9px 6px}th{background:#223b55;font-size:12px;color:#e8cd97}td{font-size:12px}td strong{color:#f0d49d}.win{background:#1e4c40;color:#d1e8d3}.lose{background:#433b48;color:#d6c3ca}.disabled{opacity:.55}.stats{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}.stats span{border:1px solid #61738b;border-radius:6px;padding:4px 7px;font-size:11px}.code{font-family:ui-monospace,monospace}.links{display:flex;gap:9px;flex-wrap:wrap}.links a{border:1px solid #827451;border-radius:8px;color:#f3d89b;padding:9px 13px;text-decoration:none}.alert{color:#ffb6a5;font-size:13px;min-height:21px}li{margin:6px 0}footer{font-size:11px;color:#aebbd0;margin-top:21px}
+@media(max-width:760px){.grid,.trio{grid-template-columns:1fr}.panel{padding:14px}}
+</style></head><body><main>
+<header><span class="eyebrow">ATHLETIC MASTERS · GAME DESIGN LAB</span><h1>Confrontations <span style="color:#ebc78b">V1.3</span></h1><p class="muted">Analyser les Défis, les Parades et la Pression sans changer les règles historiques.</p></header>
+<section class="panel warning"><strong>LABORATOIRE FICTIF ET NON CANONIQUE.</strong> D-05 V0.4 est notre référence approuvée pour les anciens playtests, pas une règle commerciale. Toutes les statistiques ici appartiennent aux douze athlètes fictifs LAB-*. Les bonus de « Parade préparée » (T2) viennent de D-02, qui reste en proposition. Aucune carte historique ni application principale n'est modifiée.</section>
+<section class="panel"><h2>1. Simuler un Défi exact</h2><div class="grid">
+<div><label for="direction">Sens de l'attaque</label><select id="direction"><option value="A">Équipe A défie équipe B</option><option value="B">Équipe B défie équipe A</option></select></div>
+<div><label for="defense">Réaction déclarée</label><select id="defense"><option value="none">Aucune Parade</option><option value="parry">Parade payée (+1 Technique)</option><option value="t2">Parade payée + soutien T2 (+2 Technique)</option></select></div>
+<div><label for="attacker">Athlète qui tente le Défi</label><select id="attacker"></select></div>
+<div><label for="defender">Athlète ciblé</label><select id="defender"></select></div>
+<div><label for="attackerEnergy">Énergies du défieur avant l'action</label><select id="attackerEnergy"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option></select></div>
+<div><label for="defenderEnergy">Énergies du défenseur avant la réaction</label><select id="defenderEnergy"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option></select></div>
+<div><label for="pressure">Pression déjà reçue par le défenseur</label><select id="pressure"><option value="0">0 Pression</option><option value="1">1 Pression</option></select></div>
+<div><label for="t2available">Soutien T2 légal dans cette fenêtre ?</label><select id="t2available"><option value="yes">Oui : en main, droit de soutien disponible</option><option value="no">Non : absent ou limite atteinte</option></select></div>
+</div><p class="hint">L'énergie du Défi est dépensée avant la Parade. Le soutien T2 coûte 0 énergie mais utilise une carte de soutien et suppose une Parade payée. Aucun score sportif n'est attribué dans cette simulation ciblée.</p><div id="challengeResult" class="result" aria-live="polite"></div><p class="alert" id="challengeWarning" role="alert"></p></section>
+<section class="panel"><h2>2. Matrice exhaustive des confrontations</h2><div class="between"><p class="muted">36 couples possibles dans chaque sens, soit 72 confrontations. La couleur indique si le Défi serait réussi avec les statistiques seules et le bonus de défense choisi.</p><div style="min-width:180px"><label for="matrixDefense">Bonus défensif théorique</label><select id="matrixDefense"><option value="0">0 — Sans Parade</option><option value="1">+1 — Parade</option><option value="2">+2 — Parade + T2</option></select></div></div><div class="trio" id="matrixStats"></div><div class="tablewrap"><table id="matrix"></table></div><p class="hint">Cette matrice ne suppose pas que les joueurs possèdent toujours l'énergie ou le soutien nécessaires : elle compare les valeurs d'IMPACT et de TECHNIQUE.</p></section>
+<section class="panel"><h2>3. Effet sur les K.O. sur trois manches</h2><div class="trio" id="koStats"></div><p class="hint">Ces valeurs proviennent de l'énumération exacte des choix légaux : à chaque manche les deux camps choisissent indépendamment et uniformément un athlète encore disponible parmi leurs six, lancent systématiquement un Défi et appliquent une défense fixée. Un athlète K.O. ne peut plus être sélectionné aux manches suivantes. Les statistiques et ressources des cartes de soutien, sauf la défense imposée, sont absentes de ce modèle. Le scénario « +2 à chaque manche » suppose volontairement un T2 toujours disponible : ce n'est pas un deck légal réaliste, mais un contrefactuel théorique.</p>
+<div class="tablewrap"><table><thead><tr><th>Défense imposée à chaque manche</th><th>Part des parcours avec ≥1 K.O.</th><th>Défis réussis / joueur / match (moyenne)</th></tr></thead><tbody><tr><td>Aucune Parade</td><td>20,89 %</td><td>~1,16</td></tr><tr><td>Parade systématique (+1)</td><td>4,34 %</td><td>~0,42</td></tr><tr><td>Parade + T2 systématiques (+2)</td><td>0,45 %</td><td>~0,08</td></tr></tbody></table></div>
+<p class="hint">Ce sont des probabilités mathématiques dans le modèle précisé, pas des chances de K.O. en partie réelle. Les compétences, cartes en main, décisions de joueurs et stratégies de titulaire sont exclues.</p></section>
+<section class="panel"><h2>4. Décisions et travaux ouverts</h2>
+<ul><li>La Parade peut bloquer une large part des Défis dans ce pool, mais son coût d'opportunité demeure important (une énergie de moins pour les soutiens ou l'active).</li><li>La Pression a surtout un effet lorsque le même athlète est engagé à nouveau après un premier succès adverse. Le choix de ne pas le réutiliser permet d'éviter ce risque, au prix d'autres arbitrages sportifs.</li><li>Avant de changer le seuil D-05 de deux Pressions, il faut distinguer : manque de tentatives de Défi, manque de réussites, défense trop souvent efficace, et faible réutilisation d'un athlète menacé.</li><li>Les capacités actives et passives historiques doivent être reprises exactement des fiches approuvées avant tout test d'intégration. Ce laboratoire n'en ajoute aucune.</li></ul>
+<div class="links"><a href="./hybride-v12.html">Jouer au Championnat V1.2</a><a href="./codex-v10.html">Consulter le Codex</a><a href="./">Retour au Game Lab</a></div></section>
+<footer>ATHLETIC MASTERS · V1.3 · étude du mécanisme D-05 et soutien fictif T2 seulement. Aucune validation officielle ou commerciale.</footer></main>
+<script>
+"use strict";
+const ATH=[['LAB-A01','Forge',9,7,6,8],['LAB-A02','Tempo',6,8,9,7],['LAB-A03','Prisme',6,9,7,8],['LAB-A04','Éclair',8,6,7,9],['LAB-A05','Équilibre',7,8,8,7],['LAB-A06','Horizon',8,7,8,7],['LAB-B01','Acier',8,8,7,7],['LAB-B02','Souffle',7,7,9,7],['LAB-B03','Sillage',6,9,8,7],['LAB-B04','Granite',9,6,7,8],['LAB-B05','Élan',7,8,6,9],['LAB-B06','Azur',8,7,7,8]];
+const byId=Object.fromEntries(ATH.map(x=>[x[0],x]));const el=id=>document.getElementById(id);
+const DEFENSE=[0,1,2].map(v=>({bonus:v,name:v===0?'Aucune Parade':v===1?'Parade':'Parade + T2'}));
+function group(side){return ATH.filter(x=>x[0].startsWith('LAB-'+side))}
+function populate(){
+ const dir=el('direction').value,side=dir==='A'?'B':'A';
+ el('attacker').innerHTML=group(dir).map(x=>'<option value="'+x[0]+'">'+x[1]+' · IMPACT '+x[5]+'</option>').join('');
+ el('defender').innerHTML=group(side).map(x=>'<option value="'+x[0]+'">'+x[1]+' · TECHNIQUE '+x[3]+'</option>').join('');
+}
+function matchup(attacker,defender,bonus){return attacker[5]>defender[3]+bonus}
+function exactCouples(){
+ const rows=[];for(const a of group('A'))for(const b of group('B')){rows.push({from:'A',a,b});rows.push({from:'B',a:b,b:a})}return rows;
+}
+function drawChallenge(){
+ const a=byId[el('attacker').value],b=byId[el('defender').value],def=el('defense').value;
+ const aE=Number(el('attackerEnergy').value),dE=Number(el('defenderEnergy').value),pressure=Number(el('pressure').value),t2=el('t2available').value==='yes';
+ let warn='',bonus=0,paid=0,allowed=true;
+ if(aE<1){warn='Défi impossible : le défieur n’a pas l’énergie nécessaire.';allowed=false}
+ if(def!=='none'){
+   if(dE<1){warn='Réaction impossible : le défenseur ne peut pas payer sa Parade.';allowed=false}
+   else{bonus=def==='t2'?2:1;paid=1}
+   if(def==='t2'&&!t2){warn='Soutien T2 indisponible dans cette fenêtre. Sélectionnez une Parade seule ou rendez T2 disponible.';allowed=false}
+ }
+ let result='';
+ if(!allowed)result='<strong>Action non résolue</strong><small>Une déclaration illégale doit être corrigée avant de poursuivre. Aucun coût ni PC n’est déduit ici.</small>';
+ else{
+ const hit=matchup(a,b,bonus),newPressure=pressure+Number(hit),ko=newPressure>=2;
+ result='<strong>'+(hit?'Défi réussi':'Défi repoussé')+'</strong><p>IMPACT '+a[5]+' '+(hit?'&gt;':'≤')+' TECHNIQUE '+b[3]+' + '+bonus+' = '+(b[3]+bonus)+
+ '</p><p>Coût défieur : 1 énergie → reste '+(aE-1)+' · Défenseur : '+paid+' énergie → reste '+(dE-paid)+'.'+
+ (def==='t2'?' T2 consomme 1 soutien à coût 0.':'')+'</p><p>PC tactique : '+Number(hit)+' (plafond +1 par manche) · Pression du défenseur : '+pressure+' → '+newPressure+'.</p>'+
+ '<small>'+(ko?'Deux Pressions : K.O. pour le match. Remplacement et pioche de récompense selon D-05.':hit?'Première Pression : elle persiste si cet athlète rejoue.':'Aucune nouvelle Pression, pas de PC tactique.')+'</small>';
+ }
+ el('challengeResult').innerHTML=result;el('challengeWarning').textContent=warn;
+}
+function drawMatrix(){
+ const bonus=Number(el('matrixDefense').value),dir=el('direction').value,attackers=group(dir),defenders=group(dir==='A'?'B':'A');
+ const pairs=exactCouples(),success=pairs.filter(x=>matchup(x.a,x.b,bonus)).length;
+ const prevented=bonus===0?0:pairs.filter(x=>matchup(x.a,x.b,0)&&!matchup(x.a,x.b,bonus)).length;
+ el('matrixStats').innerHTML=
+ '<div class="metric"><span>Confrontations dans les deux sens</span><b>'+pairs.length+'</b></div>'+
+ '<div class="metric"><span>Défis théoriquement réussis</span><b>'+success+' / 72</b></div>'+
+ '<div class="metric"><span>Défis bloqués par la défense ajoutée</span><b>'+prevented+'</b></div>';
+ el('matrix').innerHTML='<thead><tr><th>Défieur ↘</th>'+defenders.map(x=>'<th>'+x[1]+'<br>TEC '+x[3]+'</th>').join('')+'</tr></thead>'+
+ '<tbody>'+attackers.map(a=>'<tr><th>'+a[1]+'<br>IMP '+a[5]+'</th>'+defenders.map(b=>{
+ const hit=matchup(a,b,bonus);return '<td class="'+(hit?'win':'lose')+'"><strong>'+(hit?'RÉUSSITE':'BLOQUÉ')+'</strong><br>'+a[5]+' / '+(b[3]+bonus)+'</td>';
+ }).join('')+'</tr>').join('')+'</tbody>';
+}
+function drawKO(){
+ el('koStats').innerHTML=
+ '<div class="metric"><span>Sans Parade imposée</span><b>20,89 %</b><span>Parcours avec au moins un K.O.</span></div>'+
+ '<div class="metric"><span>Avec Parade imposée</span><b>4,34 %</b><span>Parcours avec au moins un K.O.</span></div>'+
+ '<div class="metric"><span>Parade + T2 imposées</span><b>0,45 %</b><span>Contrefactuel, T2 toujours disponible</span></div>';
+}
+for(const name of ['attacker','defender','defense','attackerEnergy','defenderEnergy','pressure','t2available'])el(name).onchange=drawChallenge;
+el('matrixDefense').onchange=drawMatrix;
+el('direction').onchange=()=>{populate();drawMatrix();drawChallenge()};
+populate();drawChallenge();drawMatrix();drawKO();
+</script></body></html>
