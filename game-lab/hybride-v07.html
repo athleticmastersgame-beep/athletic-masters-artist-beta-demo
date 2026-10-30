@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>ATHLETIC MASTERS — Laboratoire numérique V0.7</title>
+<style>
+:root{font:15px/1.5 system-ui,-apple-system,sans-serif;color:#eee9df;background:#091326}
+*{box-sizing:border-box}body{margin:0}main{max-width:1110px;margin:0 auto;padding:24px 17px 70px}
+header{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap;padding-bottom:18px;border-bottom:1px solid #344258}
+h1{margin:5px 0 8px;font-size:clamp(25px,4.2vw,42px);line-height:1.13}h2{font-size:19px;margin:0 0 13px}
+.eyebrow{color:#d7b970;letter-spacing:1.6px;font-size:11px;font-weight:800;text-transform:uppercase}
+h3{margin:3px 0 7px}.muted,.hint{color:#b6c1d2}.hint{font-size:12px;margin:6px 0}
+a{color:#d9c281} .pill{display:inline-block;border:1px solid #917f59;color:#e7c985;padding:5px 9px;border-radius:22px;font-size:11px;letter-spacing:.6px}
+.panel{background:#111e31;border:1px solid #37465c;border-radius:14px;padding:19px;margin-top:16px}
+.notice{border-color:#aa8e59;background:#242339}.notice strong{color:#e7c985}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.between{display:flex;justify-content:space-between;align-items:center;gap:9px;flex-wrap:wrap}
+button,input,select{font:inherit}button,select,input[type=number]{padding:10px 13px;border:1px solid #65728a;border-radius:9px;background:#192c43;color:#f7f2e9}
+button{cursor:pointer;font-weight:650}button:hover:not(:disabled){border-color:#e1c888;background:#293e59}button:disabled{opacity:.43;cursor:not-allowed}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #8fc2ff;outline-offset:3px}
+.primary{background:#d7ba76;color:#151b28;border-color:#d7ba76}.primary:hover:not(:disabled){background:#f4d898;color:#151b28}
+label{display:block;font-size:12px;color:#c4d0db;margin-bottom:5px}select,input[type=number]{width:100%}
+.metric{padding:12px;background:#1a2b43;border:1px solid #32475f;border-radius:11px}.metric b{font-size:24px;display:block;color:#edd390}
+.team{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.player-card{background:#1a3049;border:1px solid #6f7890;border-radius:11px;padding:12px;font-size:12px;min-width:0}
+.player-card strong{display:block;font-size:13px;color:#f6e2ab}.player-card .stat{color:#cfdae5;margin-top:8px}
+.player-card.unavailable{opacity:.4}.player-card.pressure{border-color:#d59074}
+.support{display:flex;gap:11px;padding:10px;border:1px solid #40556b;border-radius:9px;align-items:flex-start;cursor:pointer}
+.support input{accent-color:#dbc07e;margin-top:4px}.support small{color:#b9c6d6;display:block}
+.log{max-height:370px;overflow:auto}.log article{border-top:1px solid #364962;padding:10px 0}.log strong{color:#e4cb96}
+.hidden{display:none!important}.status{padding:9px 12px;background:#1a3049;border-left:3px solid #d8bd76;border-radius:6px}
+#score{margin:17px 0}.chip{display:inline-flex;gap:6px;align-items:center;border:1px solid #6a7690;padding:5px 9px;border-radius:9px;font-size:12px}
+ul{padding-left:22px}li{margin:5px 0}.divider{border-top:1px solid #3c4d63;margin:17px 0}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.team{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:15px 11px 50px}.panel{padding:15px}.trio{grid-template-columns:1fr 1fr}}
+</style></head><body><main>
+<header><div><span class="eyebrow">ATHLETIC MASTERS / GAME DESIGN LAB</span><h1>Championnat hybride <span style="color:#e8c784">V0.7</span></h1><div class="muted">Un moteur hybride, plusieurs fenêtres tactiques.</div></div><span class="pill">DÉMONSTRATION NON CANONIQUE</span></header>
+<section class="panel notice"><strong>RÈGLES DE LABORATOIRE — NON OFFICIELLES.</strong> D-01, D-03 et D-05 servent de référence pour anciens playtests ; les soutiens D-02 restent une proposition. Toutes les cartes sont fictives. Les capacités des athlètes historiques, le Capitaine et certains choix d'arbitrage ne sont pas inclus. Aucun dépôt ni donnée envoyé sur un serveur.</section>
+<section class="panel"><h2>1. Configurer une partie numérique</h2><div class="trio">
+<div><label for="mode">Gameplay</label><select id="mode"><option value="hybrid">Championnat hybride — proposition D-02 V0.7</option></select></div>
+<div><label for="seat">Votre équipe</label><select id="seat"><option value="A">Équipe A · Forge</option><option value="B">Équipe B · Acier</option></select></div>
+<div><label for="seed">Graine de tirage reproductible</label><input id="seed" type="number" value="20261030" min="1" max="2147483647"></div>
+</div><div class="row" style="margin-top:13px"><button class="primary" id="reset">Nouvelle partie</button><button id="export" disabled>Exporter le journal JSON</button><span class="hint">L'application principale n'est pas modifiée ; aucune donnée n'est envoyée.</span></div></section>
+<div class="trio" id="score"></div>
+<section class="panel" id="status"><h2>2. Partie</h2><p class="muted">Cliquez sur « Nouvelle partie ».</p></section>
+<section class="panel" id="teamPanel"><h2>Votre équipe</h2><div id="team" class="team"></div></section>
+<section class="panel"><h2>Journal de match</h2><div id="journal" class="log"><div class="muted">Aucune action enregistrée.</div></div></section>
+<section class="panel"><h2>Règles de ce laboratoire</h2><div id="rules"></div></section>
+<footer class="hint" style="margin-top:22px">Référence interne : D-01/D-03/D-05 pour les playtests ; D-02 proposition non adoptée ; cartes LAB-* fictives. Les résultats de ce jeu local ne démontrent ni l'équilibrage ni le plaisir de jeu.</footer></main>
+<script>
+"use strict";
+// ATHLETIC MASTERS — Hybride V0.7, D-02 experimental; all cards LAB-* fictitious.
+const ATH=[
+['LAB-A01','Forge',9,7,6,8],['LAB-A02','Tempo',6,8,9,7],['LAB-A03','Prisme',6,9,7,8],['LAB-A04','Éclair',8,6,7,9],['LAB-A05','Équilibre',7,8,8,7],['LAB-A06','Horizon',8,7,8,7],
+['LAB-B01','Acier',8,8,7,7],['LAB-B02','Souffle',7,7,9,7],['LAB-B03','Sillage',6,9,8,7],['LAB-B04','Granite',9,6,7,8],['LAB-B05','Élan',7,8,6,9],['LAB-B06','Azur',8,7,7,8]];
+const SUP=[
+{id:'T1',name:'Ajustement technique',type:'Technique',cost:1,window:'final',effect:'Si Technique est secondaire : +2 à la performance.'},
+{id:'T2',name:'Parade préparée',type:'Technique',cost:0,window:'reaction',effect:'Avec une Parade payée : +1 Technique défensive supplémentaire.'},
+{id:'T3',name:'Impulsion contrôlée',type:'Technique',cost:1,window:'final',effect:'+1 à la performance du titulaire final.'},
+{id:'T4',name:'Élan initial',type:'Technique',cost:1,window:'prep',effect:'+2 au titulaire préparé ; perdu si celui-ci est K.O.'},
+{id:'E1',name:'Matériel polyvalent',type:'Équipement',cost:1,window:'prep',effect:'Attaché au titulaire ; +1 aux performances futures tant qu’il est disponible.'},
+{id:'E2',name:'Matériel technique',type:'Équipement',cost:1,window:'prep',effect:'Attaché au titulaire ; +2 si Technique est la statistique principale.'},
+{id:'EV1',name:'Second souffle',type:'Événement',cost:1,window:'final',effect:'+1 à la performance ; +2 si vous étiez derrière au début de la manche.'}
+];
+const C=Object.fromEntries(SUP.map(s=>[s.id,s]));
+const A=Object.fromEntries(ATH.map(a=>[a[0],a]));
+const DECK=['T1','T1','T2','T2','T3','T3','T4','T4','E1','E1','E2','E2','EV1','EV1'];
+const ROUNDS=[['FORCE','TECHNIQUE'],['ENDURANCE','IMPACT'],['TECHNIQUE','ENDURANCE']];
+const STAT={FORCE:2,TECHNIQUE:3,ENDURANCE:4,IMPACT:5};
+let game=null,rng=()=>Math.random();
+const el=id=>document.getElementById(id);
+function randseed(seed){let t=seed>>>0;return function(){t+=0x6D2B79F5;let x=t;x=Math.imul(x^(x>>>15),x|1);x^=x+Math.imul(x^(x>>>7),x|61);return ((x^(x>>>14))>>>0)/4294967296}}
+function shuffle(x){x=x.slice();for(let i=x.length-1;i>0;i--){let j=Math.floor(rng()*(i+1));[x[i],x[j]]=[x[j],x[i]]}return x}
+function side(k){return {k,ids:ATH.filter(a=>a[0].startsWith('LAB-'+k)).map(a=>a[0]),deck:shuffle(DECK),hand:[],discard:[],pressure:{},knocked:[],equip:{},pc:0,brut:0,won:0,energy:3,used:0,zero:0,prep:{},bonus:0,extraDef:0,parry:false,challenge:false,tactic:0,ath:null,startingPC:0}}
+function draw(p,n){let count=0;while(n-- >0&&p.deck.length){p.hand.push(p.deck.pop());count++}return count}
+function log(t){game.log.push({round:game.rd+1,step:game.phase,text:t})}
+function available(p){return p.ids.filter(id=>!p.knocked.includes(id))}
+function base(id,rd){if(!id)return 0;let t=A[id],r=ROUNDS[rd];return 2*t[STAT[r[0]]]+t[STAT[r[1]]]}
+function equipBonus(p,id,rd){if(!id||!p.equip[id])return 0;const e=p.equip[id];return e==='E1'?1:e==='E2'&&ROUNDS[rd][0]==='TECHNIQUE'?2:0}
+function candidates(p,window){if(p.used>=2)return [];return p.hand.map((id,index)=>({id,index,card:C[id]})).filter(o=>{
+const s=o.card;if(s.window!==window||s.cost>p.energy||(s.cost===0&&p.zero>=1))return false;
+if(s.id==='T1'&&ROUNDS[game.rd][1]!=='TECHNIQUE')return false;
+if(s.id==='T2'&&!p.parry)return false;
+if(s.type==='Équipement'&&(!p.ath||p.equip[p.ath]))return false;
+if(s.id==='T4'&&!p.ath)return false;
+return true;})}
+function cardText(o){return o.card.name+' · '+o.card.cost+' énergie · '+o.card.effect}
+function play(p,index,window){if(index===null||index===undefined||index==='')return false;
+const o=candidates(p,window).find(o=>o.index===Number(index));if(!o)return false;
+const id=o.id,s=o.card;p.hand.splice(o.index,1);p.energy-=s.cost;p.used++;if(s.cost===0)p.zero++;
+if(id==='T4')p.prep[p.ath]=(p.prep[p.ath]||0)+2;
+if(s.type==='Équipement'){p.equip[p.ath]=id;}
+if(id==='T2')p.extraDef=1;
+if(id==='T1')p.bonus+=2;
+if(id==='T3')p.bonus+=1;
+if(id==='EV1')p.bonus+=p.startingPC<other(p).startingPC?2:1;
+if(s.type!=='Équipement')p.discard.push(id);
+return true}
+function other(p){return p===game.you?game.bot:game.you}
+function botChoice(p,window){const items=candidates(p,window);if(!items.length)return null;
+let ranked=items.map(o=>{
+let val=0;if(o.id==='T4')val=1.9;if(o.id==='E1')val=2.0;if(o.id==='E2')val=game.rd===2?2.6:.6;
+if(o.id==='T2')val=2.0;if(o.id==='T1')val=2.3;if(o.id==='T3')val=1.4;if(o.id==='EV1')val=p.startingPC<other(p).startingPC?2.2:1.2;
+return {index:o.index,score:val-.12*o.card.cost+rng()*.6}});
+ranked.sort((a,b)=>b.score-a.score);
+return ranked[0].score>1.2&&rng()<.83?ranked[0].index:null}
+function botAth(p){let opts=available(p).map(id=>({id,score:base(id,game.rd)+equipBonus(p,id,game.rd)+rng()*2}));opts.sort((a,b)=>b.score-a.score);return opts[0]?.id||null}
+function beginRound(){let g=game;g.phase='pick';for(let p of [g.you,g.bot]){p.energy=3;p.used=0;p.zero=0;p.prep={};p.bonus=0;p.extraDef=0;p.parry=false;p.challenge=false;p.tactic=0;p.ath=null;p.startingPC=p.pc;if(g.rd>0)draw(p,2)}log('Manche '+(g.rd+1)+'. Épreuve '+ROUNDS[g.rd][0]+' ×2 + '+ROUNDS[g.rd][1]+'. 3 énergies par joueur.')}
+function start(){let seed=Math.trunc(Number(el('seed').value));if(!Number.isFinite(seed)||seed<1||seed>2147483647)seed=20261030;el('seed').value=seed;rng=randseed(seed);
+const k=el('seat').value;game={version:'0.7',seed,rd:0,phase:'pick',you:side(k),bot:side(k==='A'?'B':'A'),log:[]};
+draw(game.you,5);draw(game.bot,5);beginRound();el('export').disabled=false;render()}
+function selectPick(){const id=el('choice')?.value;if(!available(game.you).includes(id))return;
+game.you.ath=id;game.bot.ath=botAth(game.bot);log('Titulaires révélés : '+A[id][1]+' contre '+(game.bot.ath?A[game.bot.ath][1]:'aucun')+'.');
+game.phase='prep';render()}
+function selectSupport(window){const v=el('supportChoice')?.value??'';if(v==='')return null;const n=Number(v);
+if(!candidates(game.you,window).some(o=>o.index===n)){return 'invalid';}return n}
+function finishPrep(){const u=selectSupport('prep');if(u==='invalid')return;
+const b=botChoice(game.bot,'prep');const you=u===null?'passer':C[game.you.hand[u]].name,bot=b===null?'passer':C[game.bot.hand[b]].name;
+if(u!==null)play(game.you,u,'prep');if(b!==null)play(game.bot,b,'prep');
+log('PRÉPARATION — Vous : '+you+' ; ordinateur : '+bot+'.');game.phase='challenge';render()}
+function finishChallenge(){const you=!!el('challenge')?.checked&&game.you.energy>=1;
+const bot=game.bot.energy>=1&&(A[game.bot.ath][5]>A[game.you.ath][3]?rng()<.8:rng()<.26);
+game.you.challenge=you;game.bot.challenge=bot;
+if(you)game.you.energy--;if(bot)game.bot.energy--;
+log('DÉFIS — Vous : '+(you?'Défi':'Passer')+' ; ordinateur : '+(bot?'Défi':'Passer')+'.');
+game.phase='reaction';render()}
+function finishReaction(){
+const parry=!!el('parry')?.checked;
+if(parry&&(!game.bot.challenge||game.you.energy<1))return;
+let bparry=game.you.challenge&&game.bot.energy>=1&&(A[game.you.ath][5]>=A[game.bot.ath][3]?rng()<.75:rng()<.3);
+game.you.parry=parry;game.bot.parry=bparry;
+if(parry)game.you.energy--;if(bparry)game.bot.energy--;
+const u=selectSupport('reaction');if(u==='invalid'){if(parry)game.you.energy++;if(bparry)game.bot.energy++;game.you.parry=false;game.bot.parry=false;return}
+const b=botChoice(game.bot,'reaction');const ut=u===null?'aucune':C[game.you.hand[u]].name,bt=b===null?'aucune':C[game.bot.hand[b]].name;
+if(u!==null)play(game.you,u,'reaction');if(b!==null)play(game.bot,b,'reaction');
+log('RÉACTIONS — Parades joueur/bot : '+(parry?'oui':'non')+'/'+(bparry?'oui':'non')+' ; soutiens : '+ut+' / '+bt+'.');
+resolveChallenges()}
+function knockout(p){const id=p.ath;if(!id)return;
+p.knocked.push(id);if(p.equip[id]){p.discard.push(p.equip[id]);delete p.equip[id]}}
+function resolveChallenges(){const u=game.you,b=game.bot;const au=u.ath,ab=b.ath;
+const hitU=u.challenge&&A[au][5]>A[ab][3]+(b.parry?1:0)+b.extraDef;
+const hitB=b.challenge&&A[ab][5]>A[au][3]+(u.parry?1:0)+u.extraDef;
+if(hitU){u.tactic=1;b.pressure[ab]=(b.pressure[ab]||0)+1}
+if(hitB){b.tactic=1;u.pressure[au]=(u.pressure[au]||0)+1}
+const koB=hitU&&b.pressure[ab]>=2,koU=hitB&&u.pressure[au]>=2;
+if(koU)knockout(u);if(koB)knockout(b);
+if(koU)draw(b,1);if(koB)draw(u,1);
+if(koB)b.ath=botAth(b);
+if(koU)u.ath=null;
+log('RÉSOLUTION — Défi joueur '+(hitU?'réussi':'non réussi')+', Défi bot '+(hitB?'réussi':'non réussi')+
+'. Pression : '+(u.pressure[au]||0)+' sur '+A[au][1]+', '+(b.pressure[ab]||0)+' sur '+A[ab][1]+
+'. K.O. : '+(koU?'votre titulaire ':'')+(koB?'titulaire adversaire':'')+(koU||koB?' ; récompense +1 pioche si disponible.':' aucun.') );
+game.phase=koU?'replace':'final';render()}
+function pickReplacement(){const id=el('replacement')?.value;if(!available(game.you).includes(id))return;game.you.ath=id;log('REMPLACEMENT — '+A[id][1]+' devient votre titulaire final.');game.phase='final';render()}
+function finishFinal(){const u=selectSupport('final');if(u==='invalid')return;const b=botChoice(game.bot,'final');
+const ut=u===null?'aucun':C[game.you.hand[u]].name,bt=b===null?'aucun':C[game.bot.hand[b]].name;
+if(u!==null)play(game.you,u,'final');if(b!==null)play(game.bot,b,'final');
+log('FINALE — Vous : '+ut+' ; ordinateur : '+bt+'.');scoreRound()}
+function scoreRound(){
+const u=game.you,b=game.bot;
+const sportU=base(u.ath,game.rd),sportB=base(b.ath,game.rd);
+const totalU=sportU+u.bonus+(u.ath?(u.prep[u.ath]||0):0)+equipBonus(u,u.ath,game.rd);
+const totalB=sportB+b.bonus+(b.ath?(b.prep[b.ath]||0):0)+equipBonus(b,b.ath,game.rd);
+u.brut+=sportU;b.brut+=sportB;
+if(totalU>totalB){u.pc+=3;u.won++}else if(totalB>totalU){b.pc+=3;b.won++}else{u.pc++;b.pc++}
+u.pc+=Math.min(1,u.tactic);b.pc+=Math.min(1,b.tactic);
+log('SCORE — Performance finale '+totalU+' à '+totalB+' (brut '+sportU+' à '+sportB+
+'). PC tactiques '+u.tactic+' à '+b.tactic+'. Total '+u.pc+' à '+b.pc+'.');
+game.rd++;if(game.rd===3){game.phase='done'}else{beginRound()}render()}
+function result(){const u=game.you,b=game.bot;
+let d=u.pc-b.pc;if(!d)d=u.brut-b.brut;if(!d)d=u.won-b.won;
+return d>0?'Victoire du joueur':d<0?'Victoire de l’ordinateur':'Match nul absolu'}
+function listCards(window){
+const arr=candidates(game.you,window);return '<label for="supportChoice">Soutien à jouer (facultatif)</label><select id="supportChoice"><option value="">Passer — conserver mes cartes</option>'+arr.map(x=>'<option value="'+x.index+'">'+cardText(x)+'</option>').join('')+'</select>'+(arr.length?'':'<p class="hint">Aucun soutien légal pour cette fenêtre.</p>')}
+function render(){
+if(!game)return;
+const g=game,u=g.you,b=g.bot,rd=Math.min(2,g.rd),r=ROUNDS[rd];
+el('score').innerHTML='<div class="metric"><span>Vous · équipe '+u.k+'</span><b>'+u.pc+' PC</b></div>'+
+'<div class="metric"><span>Ordinateur · équipe '+b.k+'</span><b>'+b.pc+' PC</b></div>'+
+'<div class="metric"><span>'+ (g.phase==='done'?'Match terminé':'Manche '+(rd+1)+'/3')+'</span><b>'+u.energy+' ⚡</b><span>énergies disponibles</span></div>';
+let s='<h2>'+(g.phase==='done'?'Résultat final':'Manche '+(rd+1)+' · '+r[0]+' ×2 + '+r[1])+'</h2>';
+if(g.phase==='pick'){
+s+='<p class="hint">Sélection simultanée. Un athlète non K.O. peut revenir à la manche suivante. Pression et équipements persistent.</p>'+
+'<label for="choice">Votre titulaire</label><select id="choice">'+available(u).map(id=>'<option value="'+id+'">'+A[id][1]+' — base '+base(id,rd)+(u.equip[id]?' · équipé':'')+'</option>').join('')+'</select>'+
+'<button id="reveal" class="primary" style="margin-top:12px">Révéler les titulaires</button>';
+}else if(g.phase==='done'){
+s+='<div class="status"><strong>'+result()+'</strong><p>PC : '+u.pc+' à '+b.pc+
+' · Performance brute cumulée : '+u.brut+' à '+b.brut+' · Manches sportives : '+u.won+' à '+b.won+'</p></div>'+
+'<button id="again" class="primary" style="margin-top:12px">Rejouer (même graine)</button>';
+}else{
+s+='<div class="status">Vous : <strong>'+(u.ath?A[u.ath][1]:'K.O. — remplacement requis')+'</strong>'+
+' · Adversaire : <strong>'+(b.ath?A[b.ath][1]:'aucun titulaire disponible')+'</strong></div>';
+s+='<p class="hint">Énergie '+u.energy+'/3 · Soutiens '+u.used+'/2 · Paquet '+u.deck.length+' · Main '+u.hand.length+' · Défausse '+u.discard.length+'</p>';
+if(g.phase==='prep'){
+s+='<h3>PRÉPARATION</h3><p class="hint">Placez un équipement sur votre titulaire ou préparez un bonus. La pose est révélée simultanément.</p>'+
+listCards('prep')+'<button id="act" class="primary" style="margin-top:12px">Confirmer la préparation</button>';
+}else if(g.phase==='challenge'){
+s+='<h3>DÉFI</h3><label class="support"><input type="checkbox" id="challenge" '+(u.energy<1?'disabled':'')+
+'><span><strong>Défier pour 1 énergie</strong><small>Succès si mon Impact '+A[u.ath][5]+
+' &gt; sa Technique '+A[b.ath][3]+' + Parade et éventuel bonus défensif.</small></span></label>'+
+'<button id="act" class="primary" style="margin-top:12px">Révéler les Défis</button>';
+}else if(g.phase==='reaction'){
+s+='<h3>RÉACTION</h3><p class="hint">Défi adversaire : <strong>'+(b.challenge?'oui':'non')+
+'</strong>. Les deux Parades et réactions sont révélées simultanément.</p>'+
+'<label class="support"><input type="checkbox" id="parry" '+(!b.challenge||u.energy<1?'disabled':'')+
+'><span><strong>Parade — 1 énergie</strong><small>+1 Technique défensive contre le Défi adverse.</small></span></label>'+
+'<p class="hint">« Parade préparée » (coût 0) peut être sélectionnée seulement si vous activez la Parade.</p>'+
+listReaction()+'<button id="act" class="primary" style="margin-top:12px">Résoudre les Défis et K.O.</button>';
+}else if(g.phase==='replace'){
+s+='<h3>REMPLACEMENT APRÈS K.O.</h3><p>Votre titulaire vient d’être éliminé. Choisissez un autre athlète disponible avant la performance sportive.</p>'+
+(available(u).length?'<label for="replacement">Remplaçant</label><select id="replacement">'+available(u).map(id=>'<option value="'+id+'">'+A[id][1]+' — base '+base(id,rd)+'</option>').join('')+'</select>':'<p>Aucun remplaçant disponible : performance 0 (convention de laboratoire).</p>')+
+'<button id="act" class="primary" style="margin-top:12px">Confirmer le remplacement</button>';
+}else if(g.phase==='final'){
+s+='<h3>FINALE</h3><p class="hint">Cartes finales jouables, y compris une carte piochée en récompense après K.O. Aucune rétroaction sur les Défis.</p>'+
+listCards('final')+'<button id="act" class="primary" style="margin-top:12px">Calculer la performance et les PC</button>';
+}}
+el('status').innerHTML=s;
+if(el('reveal'))el('reveal').onclick=selectPick;
+if(el('act'))el('act').onclick=({prep:finishPrep,challenge:finishChallenge,reaction:finishReaction,replace:()=>{if(available(u).length)pickReplacement();else{game.phase='final';render()}},final:finishFinal})[g.phase];
+if(el('again'))el('again').onclick=start;
+el('team').innerHTML=u.ids.map(id=>{const a=A[id],dead=u.knocked.includes(id);return '<div class="player-card '+(dead?'unavailable':'')+' '+(u.pressure[id]?'pressure':'')+'"><strong>'+a[1]+'</strong><div class="hint">'+id+'</div><div class="stat">FOR '+a[2]+' · TEC '+a[3]+'<br>END '+a[4]+' · IMP '+a[5]+'</div><div class="hint">'+(dead?'K.O.':(u.pressure[id]||0)+' Pression')+(u.equip[id]?' · '+C[u.equip[id]].name:'')+'</div></div>'}).join('');
+el('journal').innerHTML=g.log.slice().reverse().map(e=>'<article><strong>Manche '+e.round+' · '+e.step.toUpperCase()+'</strong><div class="hint">'+e.text+'</div></article>').join('');
+el('rules').innerHTML='<ul><li><strong>Statut :</strong> moteur hybride EXPÉRIMENTAL D-02 ; ni règle canonique ni simulation d’un athlète historique réel.</li>'+
+'<li><strong>Deck :</strong> 6 athlètes visibles, 8 Techniques, 4 Équipements, 2 Événements ; 7 identités de soutiens, 2 exemplaires chacune.</li>'+
+'<li><strong>Pioche :</strong> 5 soutiens au début, +2 avant les manches 2 et 3, +1 au joueur qui inflige un K.O. (si paquet non vide).</li>'+
+'<li><strong>Fenêtres :</strong> titulaire → Préparation → Défi → Réaction → K.O. et remplacements → Finale → performance.</li>'+
+'<li><strong>Énergie :</strong> 3 par manche, sans report ; 2 soutiens max, dont un coût 0 maximum ; Défi et Parade coût 1 chacun.</li>'+
+'<li><strong>Défi :</strong> IMPACT strictement supérieur à TECHNIQUE défensive (+1 si Parade, +1 si Parade préparée). Succès : 1 PC tactique (plafond 1) et 1 Pression.</li>'+
+'<li><strong>K.O. :</strong> 2 Pressions cumulées → élimination pour le match, équipement défaussé, choix d’un remplaçant, pioche de récompense.</li>'+
+'<li><strong>Score sportif :</strong> 2 × statistique principale + secondaire, puis bonus légaux ; victoire +3 PC, égalité +1 PC chacun.</li>'+
+'<li><strong>Départage :</strong> total PC, puis performances sportives BRUTES, puis manches sportives remportées, sinon nul.</li>'+
+'<li><strong>Limites :</strong> une seule carte jouable par fenêtre dans cette UI ; équipements placés sur le titulaire seulement ; aucune capacité historique, pas de Capitaine.</li></ul>';
+}
+function listReaction(){const items=candidates(game.you,'reaction');return '<label for="supportChoice">Technique de réaction (optionnelle)</label><select id="supportChoice"><option value="">Passer</option>'+
+items.map(x=>'<option value="'+x.index+'">'+cardText(x)+'</option>').join('')+'</select>'+
+'<p class="hint">Les réactions requièrent une Parade effectivement payée.</p>'}
+el('reset').onclick=start;
+el('export').onclick=()=>{if(!game)return;const x={version:'LAB-v0.7',status:'EXPERIMENTAL_NOT_CANON',seed:game.seed,
+you:game.you.k,computer:game.bot.k,result:game.phase==='done'?result():null,log:game.log,
+score:{player:game.you.pc,computer:game.bot.pc},tiebreak:{player:game.you.brut,computer:game.bot.brut}};
+const blob=new Blob([JSON.stringify(x,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+a.href=url;a.download='athletic-masters-hybride-v07-journal.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1200)};
+start();
+</script></body></html>
