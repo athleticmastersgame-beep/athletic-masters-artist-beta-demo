@@ -1,0 +1,101 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'none'; img-src data:; object-src 'none'; form-action 'none'"><title>ATHLETIC MASTERS — Observatoire d'équilibrage LAB V1.0</title><style>
+:root{font:15px/1.5 system-ui,-apple-system,sans-serif;color:#eee9df;background:#091326}
+*{box-sizing:border-box}body{margin:0}main{max-width:1120px;margin:0 auto;padding:26px 18px 65px}h1{font-size:clamp(27px,5vw,43px);margin:7px 0}h2{font-size:21px;margin:0 0 12px}h3{font-size:16px;margin:0 0 8px}
+.eyebrow{font-size:11px;color:#ddc38b;font-weight:800;letter-spacing:1.4px}.muted,.hint{color:#bbcad7}.hint{font-size:12px}
+.notice{background:#28293c;border:1px solid #b6a072;border-radius:13px;padding:16px;margin:15px 0}
+.notice strong{color:#f3d59a}.panel{background:#142238;border:1px solid #3e5168;border-radius:14px;padding:19px;margin:16px 0}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.between{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}.tabs button{padding:9px 15px}
+button,select{font:inherit;color:#f4eadb;background:#20364d;border:1px solid #66788a;padding:10px;border-radius:9px}
+button{cursor:pointer;font-weight:700}button[aria-selected=true]{background:#e4c889;color:#132238;border-color:#e4c889}
+button:focus-visible,select:focus-visible{outline:3px solid #93c9fd;outline-offset:2px}
+label{font-size:12px;color:#c7d8e7}select{min-width:110px}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:13px}
+.kpi{padding:14px;background:#1d324b;border:1px solid #49617a;border-radius:10px}.kpi b{font-size:25px;color:#e8cb8b;display:block}.kpi span{color:#c5d1df;font-size:12px}
+.baritem{display:grid;grid-template-columns:150px 1fr 68px;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid #33465c}
+.bar{background:#263c53;height:19px;border-radius:10px;overflow:hidden}.fill{background:#ddbe7c;height:100%;border-radius:10px}.number{text-align:right;font-variant-numeric:tabular-nums;font-weight:750;color:#e7cb92}
+table{border-collapse:collapse;width:100%;font-size:12px;min-width:680px}th,td{padding:10px 7px;border-bottom:1px solid #3f5166;text-align:right;white-space:nowrap}th:first-child,td:first-child{text-align:left}th{color:#f2d698;background:#25374c}td{color:#e7e9eb}
+.scroll{overflow-x:auto}.callout{padding:14px;background:#20384f;border-left:3px solid #e8c47d;border-radius:8px;margin-top:16px}
+.links{display:flex;gap:9px;flex-wrap:wrap}.links a{border:1px solid #7d7990;padding:9px 12px;border-radius:8px;color:#efd393;text-decoration:none}
+footer{margin-top:23px;font-size:12px;color:#aebdd0}
+@media(max-width:720px){.kpis{grid-template-columns:1fr}.baritem{grid-template-columns:99px 1fr 56px;gap:8px;font-size:12px}.panel{padding:14px}}
+</style></head><body><main><span class="eyebrow">ATHLETIC MASTERS · GAME DESIGN LAB</span><h1>Observatoire d'équilibrage <span style="color:#e5c584">V1.0</span></h1><p class="muted">Comparer les variations de règles, identifier les limites des cartes universelles et prioriser les prochains essais numériques.</p>
+<section class="notice"><strong>ATTENTION — études sur joueurs artificiels uniquement.</strong> Les variantes ci-dessous sont des expériences calculées sur les cartes fictives LAB-*. Une victoire, une moyenne ou un écart statistique ne prouve pas l'équilibrage, la durée d'une vraie partie, sa profondeur stratégique ni son agrément. Les trois règles officielles ne sont pas décidées.</section>
+<section class="panel"><h2>Explorer les résultats</h2><div class="tabs" role="tablist" aria-label="Choisir un groupe d'expériences">
+<button role="tab" id="b-relais" aria-selected="true" data-mode="relais">Relais</button><button role="tab" id="b-conquete" aria-selected="false" data-mode="conquete">Conquête</button><button role="tab" id="b-championnat" aria-selected="false" data-mode="championnat">Championnat</button><button role="tab" id="b-decks" aria-selected="false" data-mode="decks">Decks compatibles</button>
+</div><div id="view" role="tabpanel" aria-live="polite"></div></section>
+<section class="panel"><h2>Pourquoi nous testons plusieurs règles</h2><div class="links"><a href="./hybride-v08.html">Championnat hybride V0.8</a><a href="./conquete-v10.html">Conquête V1.0</a><a href="./relais-v10.html">Relais V1.0</a><a href="./codex-v09.html">Codex V0.9</a></div><p class="hint">Les versions archivées V0.8 / V0.9 conservent les anciennes compositions pour comparer les effets des adaptations. Les modèles canoniques ATHLETIC MASTERS restent inchangés.</p></section>
+<section class="panel"><h2>Méthode et limites</h2><ul>
+<li><strong>Relais :</strong> 9 conditions, 320 courses par condition (160 graines identiques pour les deux places), 2 880 courses. La formation du bot a été ajustée pour avoir autant de titulaires que l'humain. Coefficients de fatigue testés : 2, 3, 4.</li>
+<li><strong>Conquête :</strong> 6 conditions, 320 parties chacune, 1 920 parties. Points à chaque tour, à partir du tour 2 ou au seul dernier tour ; départage d'Impact actif ou non.</li>
+<li><strong>Championnat :</strong> 3 variantes × 2 politiques de joueur, 320 matchs par condition, 1 920 matchs. Deux Pressions = K.O. (témoin), un seul coup = K.O. (stress test non recommandé par défaut), ou pénalité de performance de -2 par Pression sans modifier le seuil. Le bot reste heuristique.</li>
+<li><strong>Decks :</strong> comparaison de 14 soutiens dont 2 incompatibles avec 12 soutiens compatibles, 320 matchs par configuration et par mode (1 280 parties).</li>
+<li>Les résultats de variantes ne sont pas des estimations indépendantes de la qualité du jeu : les changements peuvent modifier les décisions de l'agent. Aucune partie n'a été jouée par un humain dans ces expériences.</li>
+</ul></section><footer>ATHLETIC MASTERS · Observatoire expérimental V1.0. Aucun test papier, aucune donnée historique ajoutée, aucun changement au TCG officiel.</footer></main>
+<script>
+"use strict";
+const RELAIS=[
+{n:3,f:2,pct:20.22,pen:4.04,draw:1.88,spread:3.89},{n:3,f:3,pct:17.34,pen:5.20,draw:4.06,spread:3.86},{n:3,f:4,pct:17.09,pen:6.84,draw:8.13,spread:3.97},
+{n:4,f:2,pct:11.81,pen:2.36,draw:10.0,spread:2.65},{n:4,f:3,pct:5.84,pen:1.75,draw:7.5,spread:2.93},{n:4,f:4,pct:3.69,pen:1.48,draw:8.75,spread:3.11},
+{n:5,f:2,pct:7.81,pen:1.56,draw:15.94,spread:2.25},{n:5,f:3,pct:1.81,pen:0.54,draw:14.38,spread:2.37},{n:5,f:4,pct:0.78,pen:0.31,draw:14.06,spread:2.45}];
+const CONQUETE=[
+{score:'Tous les tours',impact:true,prestige:9.74,swings:12.19,contested:.566,draw:.63},
+{score:'Tous les tours',impact:false,prestige:9.61,swings:10.94,contested:.597,draw:.63},
+{score:'Tours 2 à 4',impact:true,prestige:8.14,swings:6.88,contested:.566,draw:.63},
+{score:'Tours 2 à 4',impact:false,prestige:8.06,swings:6.25,contested:.597,draw:.63},
+{score:'Tour 4 seulement',impact:true,prestige:2.91,swings:0,contested:.566,draw:.94},
+{score:'Tour 4 seulement',impact:false,prestige:2.89,swings:0,contested:.598,draw:.94}];
+const CHAMP=[
+{variant:'2 Pressions = K.O.',policy:'Sélection au score',challenges:.27,hits:.16,ko:0,pressure:.16},
+{variant:'2 Pressions = K.O.',policy:'Titulaire conservé',challenges:3,hits:.28,ko:0,pressure:.28},
+{variant:'1 Pression = K.O.',policy:'Sélection au score',challenges:.27,hits:.16,ko:15.63,pressure:.16},
+{variant:'1 Pression = K.O.',policy:'Titulaire conservé',challenges:3,hits:.28,ko:27.5,pressure:.28},
+{variant:'2 Pressions + malus -2',policy:'Sélection au score',challenges:.27,hits:.16,ko:0,pressure:.16},
+{variant:'2 Pressions + malus -2',policy:'Titulaire conservé',challenges:3,hits:.28,ko:0,pressure:.28}];
+const DECK=[
+{mode:'Relais',deck:'14 dont 2 T2 inactives',dead:68.38,unused:.56,supports:9.69},
+{mode:'Relais',deck:'12 compatibles',dead:0,unused:0,supports:9.92},
+{mode:'Conquête',deck:'14 dont 2 T2 inactives',dead:63.75,unused:.56,supports:5.58},
+{mode:'Conquête',deck:'12 compatibles',dead:0,unused:0,supports:5.28}
+];
+const el=id=>document.getElementById(id);let mode='relais',fatigue=3,impact=true,policy='Sélection au score';
+function bar(title,rows,field,max,suffix){return '<h3>'+title+'</h3>'+rows.map((x,i)=>'<div class="baritem"><div>'+x.name+'</div><div class="bar" role="img" aria-label="'+x.name+' : '+x[field]+' '+suffix+'"><div class="fill" style="width:'+Math.max(0,Math.min(100,x[field]/max*100))+'%"></div></div><div class="number">'+x[field]+suffix+'</div></div>').join('')}
+function table(headers,rows){return '<div class="scroll"><table><thead><tr>'+headers.map(h=>'<th scope="col">'+h+'</th>').join('')+'</tr></thead><tbody>'+rows.map(row=>'<tr>'+row.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>'}
+function render(){
+ for(const m of ['relais','conquete','championnat','decks'])el('b-'+m).setAttribute('aria-selected',String(m===mode));
+ let h='';
+ if(mode==='relais'){
+ const rows=RELAIS.filter(x=>x.f===fatigue).sort((a,b)=>a.n-b.n);
+ h='<h2 style="margin-top:20px">Relais — quel effectif rend la fatigue utile ?</h2><label for="fatigue">Pénalité par point de fatigue</label> <select id="fatigue">'+[2,3,4].map(n=>'<option value="'+n+'" '+(n===fatigue?'selected':'')+'>'+n+' points</option>').join('')+'</select>'+
+ '<div class="kpis"><div class="kpi"><b>2 880</b><span>Courses simulées, 9 conditions</span></div><div class="kpi"><b>3 titulaires</b><span>Configuration à approfondir</span></div><div class="kpi"><b>5 étapes</b><span>Fatigue sans repos automatique</span></div></div>'+
+ bar('Engagements encore pénalisés après récupération',rows.map(x=>({...x,name:x.n+' athlètes'})),'pct',30,'%')+
+ table(['Titulaires','Fatigue −','% pénalisés','Pénalité moyenne / course','Égalités %'],rows.map(x=>[x.n,x.f,x.pct+' %',x.pen,x.draw+' %']))+
+ '<div class="callout"><strong>Inférence de conception :</strong> avec 5 athlètes pour 5 étapes, les agents évitent presque complètement la fatigue. Trois titulaires sollicitent davantage la rotation. Le coefficient 3 n’est pas validé pour des humains.</div>';
+ }else if(mode==='conquete'){
+ const rows=CONQUETE.filter(x=>x.impact===impact);
+ h='<h2 style="margin-top:20px">Conquête — comment attribuer le prestige ?</h2><label for="impact">Impact en départage d’arène</label> <select id="impact"><option value="yes" '+(impact?'selected':'')+'>Activé</option><option value="no" '+(!impact?'selected':'')+'>Désactivé</option></select>'+
+ '<div class="kpis"><div class="kpi"><b>1 920</b><span>Parties simulées, 6 conditions</span></div><div class="kpi"><b>4 tours</b><span>Trois arènes</span></div><div class="kpi"><b>3 scores</b><span>Chaque tour / retardé / final</span></div></div>'+
+ bar('Points de prestige attribués par match, les deux équipes',rows.map(x=>({...x,name:x.score})),'prestige',12,'')+
+ table(['Attribution','Impact','Prestige moyen','Retournements de leader / 100 parties','Égalités %'],rows.map(x=>[x.score,x.impact?'Oui':'Non',x.prestige,x.swings,x.draw+' %']))+
+ '<div class="callout"><strong>Inférence de conception :</strong> le score au dernier tour simplifie le décompte mais supprime presque toute progression visible avant la fin. Continuer à expérimenter les points par tour paraît préférable à ce stade, sans preuve de supériorité ludique.</div>';
+ }else if(mode==='championnat'){
+ const rows=CHAMP.filter(x=>x.policy===policy);
+ h='<h2 style="margin-top:20px">Championnat — quelle place pour le K.O. ?</h2><label for="policy">Politique de sélection expérimentale</label> <select id="policy"><option '+(policy==='Sélection au score'?'selected':'')+'>Sélection au score</option><option '+(policy==='Titulaire conservé'?'selected':'')+'>Titulaire conservé</option></select>'+
+ '<div class="kpis"><div class="kpi"><b>1 920</b><span>Matchs simulés sur 6 conditions</span></div><div class="kpi"><b>2 Pressions</b><span>Seuil historique des playtests</span></div><div class="kpi"><b>Faible</b><span>Taux de Défis réussis de cet agent</span></div></div>'+
+ bar('Nombre de K.O. pour 100 matchs',rows.map(x=>({...x,name:x.variant})),'ko',35,'')+
+ table(['Scénario','Défis joueur / match','Défis réussis / match','K.O. / 100 matchs'],rows.map(x=>[x.variant,x.challenges,x.hits,x.ko]))+
+ '<div class="callout"><strong>Point bloquant :</strong> aucun K.O. n’apparaît dans les configurations à 2 Pressions de ces matchs scriptés. Passer à 1 Pression change fortement le nombre de K.O., mais change aussi la règle historique : ce n’est pas une décision approuvée. Les bots et les choix de titulaires doivent être améliorés avant arbitrage.</div>';
+ }else{
+ h='<h2 style="margin-top:20px">Decks — ne distribuer que des cartes utilisables</h2>'+
+ '<div class="kpis"><div class="kpi"><b>1 280</b><span>Parties comparatives automatisées</span></div><div class="kpi"><b>12 cartes</b><span>Nouveau deck compatible testé par mode</span></div><div class="kpi"><b>0 carte morte</b><span>Parade T2 exclue des paquets compatibles</span></div></div>'+
+ bar('Tours avec une carte incompatible en main',DECK.map(x=>({...x,name:x.mode+' · '+(x.deck.startsWith('14')?'Ancien':'Compatible')})),'dead',80,'%')+
+ table(['Jeu','Paquet','Tours avec T2 en main','Soutiens joués / match (2 équipes)'],DECK.map(x=>[x.mode,x.deck,x.dead+' %',x.supports]))+
+ '<div class="callout"><strong>Décision de laboratoire :</strong> Conquête V1.0 et Relais V1.0 utilisent désormais des paquets distincts de 12 soutiens (6 identités ×2), tout en conservant les sept identités dans la collection et le Codex. Les cartes incompatibles restent consultables, pas distribuées dans ces paquets.</div>';
+ }
+ el('view').innerHTML=h;
+ if(el('fatigue'))el('fatigue').onchange=()=>{fatigue=Number(el('fatigue').value);render()};
+ if(el('impact'))el('impact').onchange=()=>{impact=el('impact').value==='yes';render()};
+ if(el('policy'))el('policy').onchange=()=>{policy=el('policy').value;render()};
+}
+for(const k of ['relais','conquete','championnat','decks'])el('b-'+k).onclick=()=>{mode=k;render()};render();
+</script></body></html>
