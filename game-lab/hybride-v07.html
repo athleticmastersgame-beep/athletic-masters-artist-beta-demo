@@ -126,7 +126,7 @@ if(parry&&(!game.bot.challenge||game.you.energy<1))return;
 let bparry=game.you.challenge&&game.bot.energy>=1&&(A[game.you.ath][5]>=A[game.bot.ath][3]?rng()<.75:rng()<.3);
 game.you.parry=parry;game.bot.parry=bparry;
 if(parry)game.you.energy--;if(bparry)game.bot.energy--;
-const u=selectSupport('reaction');if(u==='invalid'){if(parry)game.you.energy++;if(bparry)game.bot.energy++;game.you.parry=false;game.bot.parry=false;return}
+const u=selectSupport('reaction');if(u==='invalid'){if(parry)game.you.energy++;if(bparry)game.bot.energy++;game.you.parry=false;game.bot.parry=false;if(el('supportChoice'))el('supportChoice').value='';render();return}
 const b=botChoice(game.bot,'reaction');const ut=u===null?'aucune':C[game.you.hand[u]].name,bt=b===null?'aucune':C[game.bot.hand[b]].name;
 if(u!==null)play(game.you,u,'reaction');if(b!==null)play(game.bot,b,'reaction');
 log('RÉACTIONS — Parades joueur/bot : '+(parry?'oui':'non')+'/'+(bparry?'oui':'non')+' ; soutiens : '+ut+' / '+bt+'.');
@@ -213,7 +213,7 @@ listCards('final')+'<button id="act" class="primary" style="margin-top:12px">Cal
 el('status').innerHTML=s;
 if(el('reveal'))el('reveal').onclick=selectPick;
 if(el('act'))el('act').onclick=({prep:finishPrep,challenge:finishChallenge,reaction:finishReaction,replace:()=>{if(available(u).length)pickReplacement();else{game.phase='final';render()}},final:finishFinal})[g.phase];
-if(el('again'))el('again').onclick=start;
+if(el('again'))el('again').onclick=start;if(g.phase==='reaction'&&el('parry')&&el('supportChoice')){el('supportChoice').disabled=!el('parry').checked;el('parry').onchange=()=>{el('supportChoice').disabled=!el('parry').checked;if(!el('parry').checked)el('supportChoice').value='';}}
 el('team').innerHTML=u.ids.map(id=>{const a=A[id],dead=u.knocked.includes(id);return '<div class="player-card '+(dead?'unavailable':'')+' '+(u.pressure[id]?'pressure':'')+'"><strong>'+a[1]+'</strong><div class="hint">'+id+'</div><div class="stat">FOR '+a[2]+' · TEC '+a[3]+'<br>END '+a[4]+' · IMP '+a[5]+'</div><div class="hint">'+(dead?'K.O.':(u.pressure[id]||0)+' Pression')+(u.equip[id]?' · '+C[u.equip[id]].name:'')+'</div></div>'}).join('');
 el('journal').innerHTML=g.log.slice().reverse().map(e=>'<article><strong>Manche '+e.round+' · '+e.step.toUpperCase()+'</strong><div class="hint">'+e.text+'</div></article>').join('');
 el('rules').innerHTML='<ul><li><strong>Statut :</strong> moteur hybride EXPÉRIMENTAL D-02 ; ni règle canonique ni simulation d’un athlète historique réel.</li>'+
