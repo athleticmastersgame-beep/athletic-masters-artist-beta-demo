@@ -82,6 +82,7 @@ function exactTally(rd,defense,support,behind){
  if(!option)continue;
  cells.push({option,challenge});
  }
+ if(!cells.length)return {pairs:0,supportBetter:0,challengeBetter:0,equal:0,sportOutcomeAffected:0,challengeHits:0,meanSupportGain:null,meanChallengeGain:null};
  return {pairs:cells.length,supportBetter:cells.filter(x=>x.option.deltaNetPC>x.challenge.deltaNetPC).length,
  challengeBetter:cells.filter(x=>x.option.deltaNetPC<x.challenge.deltaNetPC).length,
  equal:cells.filter(x=>x.option.deltaNetPC===x.challenge.deltaNetPC).length,
@@ -143,6 +144,7 @@ function render(){
  ['Défi supérieur',stats.challengeBetter],
  ['Même gain',stats.equal]
  ].map(v=>'<div class="metric"><span>'+v[0]+'</span><strong>'+v[1]+'</strong></div>').join('');
+ if(stats.pairs===0){el('aggregateStats').innerHTML='<div class="metric"><span>Carte non jouable dans cette manche</span><strong>0 situation</strong><span>Choisissez un soutien compatible avec l’épreuve.</span></div>';el('aggregateRows').innerHTML='<tr><td colspan="3">Aucune confrontation comparable pour ce soutien dans cette manche.</td></tr>';return;}
  const detail=[['Soutien meilleur',stats.supportBetter,'Gain d’écart de PC strictement supérieur au Défi'],
  ['Défi meilleur',stats.challengeBetter,'Gain d’écart de PC strictement supérieur au soutien'],
  ['À égalité',stats.equal,'Même gain de PC dans ce modèle'],
