@@ -48,7 +48,7 @@ body{background:radial-gradient(ellipse at 45% 0%,#29415d 0,#0a1327 63%)}main{ma
 </ul><div id="codex"></div></section>
 <footer>ATHLETIC MASTERS — GAME DESIGN LAB · V2.0 · cartes et effets LAB-* fictifs · aucun transfert de droit ni vente.</footer>
 </main>
-<script>
+<div id="touchInfo" class="lab-overlay" hidden><div class="lab-modal" role="dialog" aria-modal="true" aria-label="Détails de la carte"><h2>Détails de carte · LAB</h2><div id="touchInfoText"></div><button id="closeTouchInfo" type="button">Fermer</button></div></div><script>
 "use strict";
 const ATH=[['LAB-A01','Forge',9,7,6,8],['LAB-A02','Tempo',6,8,9,7],['LAB-A03','Prisme',6,9,7,8],['LAB-A04','Éclair',8,6,7,9],['LAB-A05','Équilibre',7,8,8,7],['LAB-A06','Horizon',8,7,8,7],['LAB-B01','Acier',8,8,7,7],['LAB-B02','Souffle',7,7,9,7],['LAB-B03','Sillage',6,9,8,7],['LAB-B04','Granite',9,6,7,8],['LAB-B05','Élan',7,8,6,9],['LAB-B06','Azur',8,7,7,8]];
 const SUP=[
@@ -252,4 +252,4 @@ el('closeTouchInfo').onclick=()=>{el('touchInfo').hidden=true};
 el('touchInfo').onclick=ev=>{if(ev.target===el('touchInfo'))el('touchInfo').hidden=true};
 el('export').onclick=()=>{if(!game)return;const x={status:'EXPERIMENTAL_NOT_CANON',version:'LAB-v0.8',seed:game.seed,side:game.you.side,result:game.phase==='done'?winner():null,log:game.log,botDifficulty:game.botDifficulty,points:{player:game.you.prestige,computer:game.bot.prestige}};const blob=new Blob([JSON.stringify(x,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='athletic-masters-conquete-v11.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1200)};
 start();
-</script><div id="touchInfo" class="lab-overlay" hidden><div class="lab-modal" role="dialog" aria-modal="true" aria-label="Détails de la carte"><h2>Détails de carte · LAB</h2><div id="touchInfoText"></div><button id="closeTouchInfo" type="button">Fermer</button></div></div></body></html>
+</script></body></html>
